@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ConsumerPart.Demo"></activity>
         <activity android:name=".ManufacturerPart.ManufacturerEditAccountActivity" />
         <activity android:name=".ManufacturerPart.ManufacturerAccountInfoActivity" />
         <activity android:name=".MainActivity">
