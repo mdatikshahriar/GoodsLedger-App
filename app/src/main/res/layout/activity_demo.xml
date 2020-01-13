@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center">
+
+
+    <SurfaceView
+        android:id="@+id/demo_popup_addproducts_qrcode_scanner_camera_SurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <View
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="@drawable/dashed_border"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/demo_popup_addproducts_qrcode_scanner_camera_Button"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/ic_camera_white_24dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/demo_popup_addproducts_qrcode_scanner_camera_SurfaceView"
+        android:layout_marginBottom="50dp"
+        style="?android:attr/borderlessButtonStyle"/>
+
+    <ProgressBar
+        android:id="@+id/demo_popup_addproducts_qrcode_scanner_Progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:indeterminateTint="@color/cardview_dark_background"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
