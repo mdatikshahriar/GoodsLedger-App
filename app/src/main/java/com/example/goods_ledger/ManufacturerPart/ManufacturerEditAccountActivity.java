@@ -45,6 +45,8 @@ public class ManufacturerEditAccountActivity extends AppCompatActivity {
         updateButton = findViewById(R.id.activity_manufacturer_edit_account_update_Button);
         progressBar = findViewById(R.id.activity_manufacturer_edit_account_Progressbar);
 
+        profilePictureImageView.setImageBitmap(ManufacturerStartActivity.getManufacturerKeyBitmap());
+
         accountNameEditText.setText(MainActivity.getSavedValues().getAccountName());
         accountEmailEditText.setText(MainActivity.getSavedValues().getAccountEmail());
         accountPhoneNoEditText.setText(MainActivity.getSavedValues().getAccountPhoneNumber());

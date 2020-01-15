@@ -17,18 +17,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/item_manufacturer_products_productBatchID_textView"
+        <ImageView
+            android:id="@+id/item_manufacturer_products_productQRCode_ImageView"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="3"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            android:textAlignment="center"
-            android:background="@drawable/one_sided_border"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:background="@drawable/one_sided_border"/>
 
         <LinearLayout
+            android:id="@+id/item_manufacturer_products_LinearLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
@@ -37,23 +35,23 @@
             android:background="@drawable/one_sided_border">
 
             <TextView
-                android:id="@+id/item_manufacturer_products_productName_textView"
+                android:id="@+id/item_manufacturer_products_productName_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#000000"
-                android:textSize="25sp" />
+                android:textSize="22sp" />
 
             <TextView
-                android:id="@+id/item_manufacturer_products_productType_textView"
+                android:id="@+id/item_manufacturer_products_productType_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/item_manufacturer_products_productID_textView"
+            android:id="@+id/item_manufacturer_products_productID_TextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"

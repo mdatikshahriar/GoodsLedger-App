@@ -11,7 +11,9 @@
         android:layout_height="0dp"
         android:layout_weight="5"
         android:background="@drawable/border"
-        android:padding="20dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -52,7 +54,6 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:text="Manufacturer Name"
                 android:textSize="18sp"
                 android:textColor="#000000"/>
 
@@ -63,7 +64,6 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:text="Manufacturer Trade Licence"
                 android:textSize="18sp"
                 android:textColor="#000000"/>
 
@@ -74,7 +74,6 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:text="Location"
                 android:textSize="18sp"
                 android:textColor="#000000"/>
 
@@ -166,7 +165,7 @@
                 android:background="@drawable/ic_add_circle_black_24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="2"
+                android:layout_weight="2.2"
                 android:layout_gravity="center_horizontal"
                 style="?android:attr/borderlessButtonStyle"/>
 
@@ -268,7 +267,7 @@
                 android:background="@drawable/ic_add_circle_black_24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="2"
+                android:layout_weight="2.2"
                 android:layout_gravity="center_horizontal"
                 style="?android:attr/borderlessButtonStyle"/>
 
@@ -279,7 +278,6 @@
                 android:text="See All Products"
                 android:textSize="20sp"
                 android:textColor="#000000"
-                android:layout_marginTop="12dp"
                 android:layout_gravity="center_horizontal"/>
 
             <LinearLayout

@@ -23,6 +23,7 @@ import androidx.navigation.Navigation;
 
 import com.example.goods_ledger.ConsumerPart.ConsumerAccountInfoActivity;
 import com.example.goods_ledger.MainActivity;
+import com.example.goods_ledger.ManufacturerPart.ManufacturerStartActivity;
 import com.example.goods_ledger.R;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;

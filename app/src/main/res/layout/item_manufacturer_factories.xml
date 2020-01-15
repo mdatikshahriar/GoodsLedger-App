@@ -17,41 +17,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/item_manufacturer_factories_factoryID_textView"
+        <ImageView
+            android:id="@+id/item_manufacturer_factories_factoryQRCode_ImageView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:background="@drawable/one_sided_border"/>
+
+        <LinearLayout
+            android:id="@+id/item_manufacturer_factories_LinearLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="3454"
+            android:layout_weight="10"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:background="@drawable/one_sided_border">
+
+            <TextView
+                android:id="@+id/item_manufacturer_factories_factoryLocation_TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/item_manufacturer_factories_factoryManufacturerName_TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/item_manufacturer_factories_factoryID_TextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
             android:textColor="#000000"
             android:textSize="20sp"
             android:textAlignment="center"
             android:background="@drawable/one_sided_border"
             android:layout_gravity="center"/>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/item_manufacturer_factories_factoryManufacturerName_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="mnbmbm"
-                android:textColor="#000000"
-                android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/item_manufacturer_factories_factoryLocation_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:text="gfdgdfgfdgdf"
-                android:textSize="20sp" />
-        </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

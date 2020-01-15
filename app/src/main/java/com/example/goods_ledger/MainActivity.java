@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -22,6 +23,11 @@ import com.example.goods_ledger.ManufacturerPart.AddManufacturerActivity;
 import com.example.goods_ledger.ManufacturerPart.ManufacturerStartActivity;
 import com.example.goods_ledger.Assets.Links;
 import com.example.goods_ledger.Assets.SavedValues;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -152,5 +158,20 @@ public class MainActivity extends AppCompatActivity {
 
     public static RetryPolicy getRetryPolicy() {
         return retryPolicy;
+    }
+
+    public static
+    Bitmap getQRcodeBitmap(String text){
+        Bitmap qrCodeBitmap = null;
+
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        try {
+            BitMatrix bitMatrix = multiFormatWriter.encode(MainActivity.getSavedValues().getManufacturerKey(), BarcodeFormat.QR_CODE,500,500);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            qrCodeBitmap = barcodeEncoder.createBitmap(bitMatrix);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+        return qrCodeBitmap;
     }
 }

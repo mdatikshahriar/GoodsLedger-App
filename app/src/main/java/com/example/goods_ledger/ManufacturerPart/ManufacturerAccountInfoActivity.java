@@ -34,6 +34,8 @@ public class ManufacturerAccountInfoActivity extends AppCompatActivity {
         manufacturerTradeLicenceIDTextView = findViewById(R.id.activity_manufacturer_account_info_manufacturerTradeLicenceID_TextView);
         editButton = findViewById(R.id.activity_manufacturer_account_info_edit_Button);
 
+        profilePictureImageView.setImageBitmap(ManufacturerStartActivity.getManufacturerKeyBitmap());
+
         accountTypeTextView.setText(MainActivity.getSavedValues().getAccountType());
         accountNameTextView.setText(MainActivity.getSavedValues().getAccountName());
         accountUsernameTextView.setText(MainActivity.getSavedValues().getAccountUsername());
@@ -46,7 +48,6 @@ public class ManufacturerAccountInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ManufacturerAccountInfoActivity.this, ManufacturerEditAccountActivity.class));
-                finish();
             }
         });
     }

@@ -1,9 +1,15 @@
 package com.example.goods_ledger.ManufacturerPart.ui.Factories;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,13 +43,15 @@ public class FactoriesAdapter extends RecyclerView.Adapter <RecyclerView.ViewHol
 
         FactoriesAdapter.FactoriesHolder factoriesHolder = (FactoriesAdapter.FactoriesHolder) holder;
 
-        TextView factoryID = factoriesHolder.factoryID;
-        TextView factoryManufacturerName = factoriesHolder.factoryManufacturerName;
+        ImageView factoryQRCodeImageView = factoriesHolder.factoryQRCodeImageView;
         TextView factoryLocation = factoriesHolder.factoryLocation;
+        TextView factoryManufacturerName = factoriesHolder.factoryManufacturerName;
+        TextView factoryID = factoriesHolder.factoryID;
 
-        factoryID.setText(factory.getFactoryID());
-        factoryManufacturerName.setText(MainActivity.getSavedValues().getManufacturerName());
+        factoryQRCodeImageView.setImageBitmap(MainActivity.getQRcodeBitmap(factory.getFactoryKey()));
         factoryLocation.setText(factory.getFactoryLocation());
+        factoryManufacturerName.setText(MainActivity.getSavedValues().getManufacturerName());
+        factoryID.setText(factory.getFactoryID());
     }
 
     @Override
@@ -53,14 +61,63 @@ public class FactoriesAdapter extends RecyclerView.Adapter <RecyclerView.ViewHol
     }
 
     private class FactoriesHolder extends RecyclerView.ViewHolder{
-        TextView factoryID, factoryManufacturerName, factoryLocation;
+        private ImageView factoryQRCodeImageView;
+        private LinearLayout factoryLinearLayout;
+        private TextView factoryLocation, factoryManufacturerName, factoryID;
+        private Dialog qrcodePopup, factoryInfoPopup;
 
-        public FactoriesHolder(@NonNull View itemView) {
+        public FactoriesHolder(@NonNull final View itemView) {
             super(itemView);
 
-            factoryID = itemView.findViewById(R.id.item_manufacturer_factories_factoryID_textView);
-            factoryManufacturerName = itemView.findViewById(R.id.item_manufacturer_factories_factoryManufacturerName_textView);
-            factoryLocation = itemView.findViewById(R.id.item_manufacturer_factories_factoryLocation_textView);
+            qrcodePopup = new Dialog(itemView.getContext());
+            factoryInfoPopup = new Dialog(itemView.getContext());
+
+            factoryQRCodeImageView = itemView.findViewById(R.id.item_manufacturer_factories_factoryQRCode_ImageView);
+            factoryLinearLayout = itemView.findViewById(R.id.item_manufacturer_factories_LinearLayout);
+            factoryLocation = itemView.findViewById(R.id.item_manufacturer_factories_factoryLocation_TextView);
+            factoryManufacturerName = itemView.findViewById(R.id.item_manufacturer_factories_factoryManufacturerName_TextView);
+            factoryID = itemView.findViewById(R.id.item_manufacturer_factories_factoryID_TextView);
+
+            factoryQRCodeImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageView factoryQRCodeImage;
+
+                    qrcodePopup.setContentView(R.layout.popup_qrcode_image);
+                    qrcodePopup.setCanceledOnTouchOutside(true);
+
+                    factoryQRCodeImage = qrcodePopup.findViewById(R.id.popup_qrcode_image_ImageView);
+
+                    factoryQRCodeImage.setImageDrawable(factoryQRCodeImageView.getDrawable());
+
+                    qrcodePopup.show();
+                    qrcodePopup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                }
+            });
+
+            factoryLinearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageView factoryQRCodeImage;
+                    TextView factoryIDTextView, factoryLocationTextView, factoryManufacturerNameTextView;
+
+                    factoryInfoPopup.setContentView(R.layout.popup_factory_info);
+                    factoryInfoPopup.setCanceledOnTouchOutside(true);
+
+                    factoryQRCodeImage = factoryInfoPopup.findViewById(R.id.popup_factory_info_factoryQRCode_ImageView);
+                    factoryIDTextView = factoryInfoPopup.findViewById(R.id.popup_factory_info_factoryID_TextView);
+                    factoryLocationTextView = factoryInfoPopup.findViewById(R.id.popup_factory_info_factoryLocation_TextView);
+                    factoryManufacturerNameTextView = factoryInfoPopup.findViewById(R.id.popup_factory_info_factoryManufacturerName_TextView);
+
+                    factoryQRCodeImage.setImageDrawable(factoryQRCodeImageView.getDrawable());
+                    factoryIDTextView.setText(factoryID.getText());
+                    factoryLocationTextView.setText(factoryLocation.getText());
+                    factoryManufacturerNameTextView.setText(factoryManufacturerName.getText());
+
+                    factoryInfoPopup.show();
+                    factoryInfoPopup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                }
+            });
         }
     }
 }

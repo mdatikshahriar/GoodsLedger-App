@@ -1,10 +1,8 @@
 package com.example.goods_ledger.ManufacturerPart;
 
-import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,6 +32,7 @@ import java.util.Map;
 
 public class ManufacturerStartActivity extends AppCompatActivity {
 
+    private static Bitmap manufacturerKeyBitmap;
     private static ArrayList<Product> productsArray;
     private static ArrayList<Factory> factoriesArray;
 
@@ -48,6 +47,8 @@ public class ManufacturerStartActivity extends AppCompatActivity {
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_manufacturer_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
+
+        manufacturerKeyBitmap = MainActivity.getQRcodeBitmap(MainActivity.getSavedValues().getManufacturerKey());
 
         productsArray = new ArrayList<>();
         factoriesArray = new ArrayList<>();
@@ -161,6 +162,10 @@ public class ManufacturerStartActivity extends AppCompatActivity {
 
         RequestQueue requestQueue2 = Volley.newRequestQueue(ManufacturerStartActivity.this);
         requestQueue2.add(stringRequest2);
+    }
+
+    public static Bitmap getManufacturerKeyBitmap() {
+        return manufacturerKeyBitmap;
     }
 
     public static ArrayList<Product> getProductsArray() {

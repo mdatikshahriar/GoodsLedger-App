@@ -48,7 +48,7 @@ public class ManufacturerHomeFragment extends Fragment {
             factoryCountTextView, productsCountTextView;
     private LinearLayout manufacturerSeeMoreLinearLayout, factoriesHereLinearLayout, productsHereLinearLayout;
     private Button addFactoriesButton, addProductsButton;
-    private Dialog addFactoriesPopup, addProductsPopup;
+    private Dialog addFactoriesPopup, addProductsPopup, profilePicturePopup;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +67,9 @@ public class ManufacturerHomeFragment extends Fragment {
         addProductsButton = root.findViewById(R.id.fragment_manufacturer_home_addProducts_Button);
         addFactoriesPopup = new Dialog(getActivity());
         addProductsPopup = new Dialog(getActivity());
+        profilePicturePopup = new Dialog(getActivity());
+
+        profilePictureImageView.setImageBitmap(ManufacturerStartActivity.getManufacturerKeyBitmap());
 
         manufacturerNameTextView.setText(MainActivity.getSavedValues().getManufacturerName());
         manufacturerTradeLicenceIDTextView.setText(MainActivity.getSavedValues().getManufacturerTradeLicenceID());
@@ -92,6 +95,23 @@ public class ManufacturerHomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v).navigate(R.id.action_navigation_manufacturer_home_to_navigation_manufacturer_products);
+            }
+        });
+
+        profilePictureImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageView productQRCodeImage;
+
+                profilePicturePopup.setContentView(R.layout.popup_qrcode_image);
+                profilePicturePopup.setCanceledOnTouchOutside(true);
+
+                productQRCodeImage = profilePicturePopup.findViewById(R.id.popup_qrcode_image_ImageView);
+
+                productQRCodeImage.setImageDrawable(profilePictureImageView.getDrawable());
+
+                profilePicturePopup.show();
+                profilePicturePopup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             }
         });
 
