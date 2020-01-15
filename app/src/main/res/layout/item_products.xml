@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/item_manufacturer_products_productQRCode_ImageView"
+            android:id="@+id/item_products_productQRCode_ImageView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
@@ -26,7 +26,7 @@
             android:background="@drawable/one_sided_border"/>
 
         <LinearLayout
-            android:id="@+id/item_manufacturer_products_LinearLayout"
+            android:id="@+id/item_products_LinearLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
@@ -35,14 +35,14 @@
             android:background="@drawable/one_sided_border">
 
             <TextView
-                android:id="@+id/item_manufacturer_products_productName_TextView"
+                android:id="@+id/item_products_productName_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#000000"
                 android:textSize="22sp" />
 
             <TextView
-                android:id="@+id/item_manufacturer_products_productType_TextView"
+                android:id="@+id/item_products_productType_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -51,7 +51,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/item_manufacturer_products_productID_TextView"
+            android:id="@+id/item_products_productID_TextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"

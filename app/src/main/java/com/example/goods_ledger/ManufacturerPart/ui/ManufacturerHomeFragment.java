@@ -234,7 +234,9 @@ public class ManufacturerHomeFragment extends Fragment {
                 addButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        final String  productOwnerAccountID = "*#@%";
                         final String  productManufacturerID = MainActivity.getSavedValues().getManufacturerKey();
+                        final String  productManufacturerName = MainActivity.getSavedValues().getManufacturerName();
                         final String  productFactoryID = productFactoryIDEditText.getText().toString();
                         final String  productID = productIDEditText.getText().toString();
                         final String  productName = productNameEditText.getText().toString();
@@ -282,7 +284,9 @@ public class ManufacturerHomeFragment extends Fragment {
                                             JSONObject object = new JSONObject(response);
 
                                             String productKeyResponse = object.getString("productKey").trim();
+                                            String productOwnerAccountIDResponse = object.getString("productOwnerAccountID").trim();
                                             String productManufacturerIDResponse = object.getString("productManufacturerID").trim();
+                                            String productManufacturerNameResponse = object.getString("productManufacturerName").trim();
                                             String productFactoryIDResponse = object.getString("productFactoryID").trim();
                                             String productIDResponse = object.getString("productID").trim();
                                             String productNameResponse = object.getString("productName").trim();
@@ -291,7 +295,7 @@ public class ManufacturerHomeFragment extends Fragment {
                                             String productManufacturingDateResponse = object.getString("productManufacturingDate").trim();
                                             String productExpiryDateResponse = object.getString("productExpiryDate").trim();
 
-                                            Product newProduct = new Product(productKeyResponse, productManufacturerIDResponse, productFactoryIDResponse, productIDResponse,
+                                            Product newProduct = new Product(productKeyResponse, productOwnerAccountIDResponse, productManufacturerIDResponse, productManufacturerNameResponse,productFactoryIDResponse, productIDResponse,
                                                     productNameResponse, productTypeResponse, productBatchResponse, productManufacturingDateResponse, productExpiryDateResponse);
 
                                             ManufacturerStartActivity.getProductsArray().add(newProduct);
@@ -321,7 +325,9 @@ public class ManufacturerHomeFragment extends Fragment {
                             @Override
                             protected Map<String, String> getParams() {
                                 Map<String, String> params = new HashMap<>();
+                                params.put("productOwnerAccountID", productOwnerAccountID);
                                 params.put("productManufacturerID", productManufacturerID);
+                                params.put("productManufacturerName", productManufacturerName);
                                 params.put("productFactoryID", productFactoryID);
                                 params.put("productID", productID);
                                 params.put("productName", productName);

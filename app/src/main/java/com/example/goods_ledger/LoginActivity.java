@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     JSONObject object = jsonObject.getJSONObject("Record");
 
-                                    String accountKeyResponse = jsonObject.getString("Key").trim();;
+                                    String accountKeyResponse = jsonObject.getString("Key").trim();
                                     String accountTokenResponse = object.getString("AccountToken").trim();
                                     String accountTypeResponse = object.getString("AccountType").trim();
                                     String accountNameResponse = object.getString("AccountName").trim();

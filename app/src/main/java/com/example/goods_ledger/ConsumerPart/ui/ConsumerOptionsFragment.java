@@ -68,6 +68,8 @@ public class ConsumerOptionsFragment extends Fragment {
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
+                                MainActivity.getSavedValues().setOwnedProductsCount("0");
+
                                 MainActivity.getSavedValues().setAccountToken(accountToken);
                                 startActivity(new Intent(getActivity(), LoginActivity.class));
                                 getActivity().finish();

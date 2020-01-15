@@ -29,7 +29,7 @@
         android:id="@+id/navigation_manufacturer_products"
         android:name="com.example.goods_ledger.ManufacturerPart.ui.Products.ManufacturerProductsFragment"
         android:label="Products"
-        tools:layout="@layout/fragment_manufacturer_products" >
+        tools:layout="@layout/fragment_products" >
     </fragment>
 
     <fragment

@@ -46,6 +46,8 @@ public class ConsumerEditAccountActivity extends AppCompatActivity {
         updateButton = findViewById(R.id.activity_consumer_edit_account_update_Button);
         progressBar = findViewById(R.id.activity_consumer_edit_account_Progressbar);
 
+        profilePictureImageView.setImageBitmap(ConsumerStartActivity.getAccountUsernameBitmap());
+
         accountNameEditText.setText(MainActivity.getSavedValues().getAccountName());
         accountEmailEditText.setText(MainActivity.getSavedValues().getAccountEmail());
         accountPhoneNoEditText.setText(MainActivity.getSavedValues().getAccountPhoneNumber());

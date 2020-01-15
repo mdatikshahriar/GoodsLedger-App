@@ -2,12 +2,14 @@ package com.example.goods_ledger.Assets;
 
 public class Product {
 
-    private String productKey, productOwnerAccountID, productManufacturerID, productFactoryID, productID,
+    private String productKey, productOwnerAccountID, productManufacturerID, productManufacturerName, productFactoryID, productID,
             productName, productType, productBatch, productManufacturingDate, productExpiryDate;
 
-    public Product(String productKey, String productManufacturerID, String productFactoryID, String productID, String productName, String productType, String productBatch, String productManufacturingDate, String productExpiryDate) {
+    public Product(String productKey, String productOwnerAccountID, String productManufacturerID, String productManufacturerName, String productFactoryID, String productID, String productName, String productType, String productBatch, String productManufacturingDate, String productExpiryDate) {
         this.productKey = productKey;
+        this.productOwnerAccountID = productOwnerAccountID;
         this.productManufacturerID = productManufacturerID;
+        this.productManufacturerName = productManufacturerName;
         this.productFactoryID = productFactoryID;
         this.productID = productID;
         this.productName = productName;
@@ -39,6 +41,14 @@ public class Product {
 
     public void setProductManufacturerID(String productManufacturerID) {
         this.productManufacturerID = productManufacturerID;
+    }
+
+    public String getProductManufacturerName() {
+        return productManufacturerName;
+    }
+
+    public void setProductManufacturerName(String productManufacturerName) {
+        this.productManufacturerName = productManufacturerName;
     }
 
     public String getProductFactoryID() {

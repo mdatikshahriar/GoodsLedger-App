@@ -6,7 +6,7 @@
     android:padding="10dp">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_manufacturer_products_RecyclerView"
+        android:id="@+id/fragment_products_RecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

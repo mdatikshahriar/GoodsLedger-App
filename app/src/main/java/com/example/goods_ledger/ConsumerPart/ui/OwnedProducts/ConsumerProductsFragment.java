@@ -1,4 +1,4 @@
-package com.example.goods_ledger.ManufacturerPart.ui.Products;
+package com.example.goods_ledger.ConsumerPart.ui.OwnedProducts;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.goods_ledger.ManufacturerPart.ManufacturerStartActivity;
+import com.example.goods_ledger.ConsumerPart.ConsumerStartActivity;
 import com.example.goods_ledger.R;
 
-public class ManufacturerProductsFragment extends Fragment {
+public class ConsumerProductsFragment extends Fragment {
 
     private RecyclerView productRecyclerView;
     private RecyclerView.Adapter productRecyclerViewAdapter;
@@ -35,7 +35,7 @@ public class ManufacturerProductsFragment extends Fragment {
 
         productRecyclerView.setLayoutManager(productRecyclerViewLayoutManager);
 
-        productRecyclerViewAdapter = new ProductsAdapter(ManufacturerStartActivity.getProductsArray());
+        productRecyclerViewAdapter = new OwnedProductsAdapter(ConsumerStartActivity.getOwnedProductsArray());
         productRecyclerView.setAdapter(productRecyclerViewAdapter);
 
         return root;

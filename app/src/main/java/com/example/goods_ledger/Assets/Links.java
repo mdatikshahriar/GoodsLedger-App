@@ -20,6 +20,8 @@ public class Links {
     private final String URL_queryManufacturerbyTradeLicenceID = URL_main + "/queryManufacturerbyTradeLicenceID";
     private final String URL_queryFactorybyManufacturerID = URL_main + "/queryFactorybyManufacturerID";
     private final String URL_queryFactorybyID = URL_main + "/queryFactorybyID";
+    private final String URL_queryProductbyID = URL_main + "/queryProductbyID";
+    private final String URL_queryProductbyCode = URL_main + "/queryProductbyCode";
     private final String URL_queryProductbyOwnerAccountID = URL_main + "/queryProductbyOwnerAccountID";
     private final String URL_queryProductbyManufacturerID = URL_main + "/queryProductbyManufacturerID";
     private final String URL_queryProductbyFactoryID = URL_main + "/queryProductbyFactoryID";
@@ -101,6 +103,14 @@ public class Links {
 
     public String getURL_queryFactorybyID() {
         return URL_queryFactorybyID;
+    }
+
+    public String getURL_queryProductbyID() {
+        return URL_queryProductbyID;
+    }
+
+    public String getURL_queryProductbyCode() {
+        return URL_queryProductbyCode;
     }
 
     public String getURL_queryProductbyOwnerAccountID() {

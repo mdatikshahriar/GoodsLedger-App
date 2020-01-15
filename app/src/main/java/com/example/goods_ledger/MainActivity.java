@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     JSONObject object = jsonObject.getJSONObject("Record");
 
-                                    String accountKeyResponse = jsonObject.getString("Key").trim();;
+                                    String accountKeyResponse = jsonObject.getString("Key").trim();
                                     String accountTokenResponse = object.getString("AccountToken").trim();
                                     String accountTypeResponse = object.getString("AccountType").trim();
                                     String accountNameResponse = object.getString("AccountName").trim();
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
-            BitMatrix bitMatrix = multiFormatWriter.encode(MainActivity.getSavedValues().getManufacturerKey(), BarcodeFormat.QR_CODE,500,500);
+            BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE,500,500);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             qrCodeBitmap = barcodeEncoder.createBitmap(bitMatrix);
         } catch (WriterException e) {

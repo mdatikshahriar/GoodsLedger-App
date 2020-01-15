@@ -1,4 +1,4 @@
-package com.example.goods_ledger.ManufacturerPart.ui.Products;
+package com.example.goods_ledger.ConsumerPart.ui.OwnedProducts;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -19,11 +19,11 @@ import com.example.goods_ledger.Assets.Product;
 
 import java.util.ArrayList;
 
-public class ProductsAdapter extends RecyclerView.Adapter <RecyclerView.ViewHolder> {
+public class OwnedProductsAdapter extends RecyclerView.Adapter <RecyclerView.ViewHolder> {
 
     private ArrayList<Product> productsArray;
 
-    ProductsAdapter(ArrayList<Product> productsArray) {
+    OwnedProductsAdapter(ArrayList<Product> productsArray) {
         this.productsArray = productsArray;
     }
 
@@ -32,28 +32,28 @@ public class ProductsAdapter extends RecyclerView.Adapter <RecyclerView.ViewHold
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_products, parent, false);
-        return new ProductsHolder(view);
+        return new OwnedProductsHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Product product = productsArray.get(position);
 
-        ProductsHolder productsHolder = (ProductsHolder) holder;
+        OwnedProductsHolder ownedProductsHolder = (OwnedProductsHolder) holder;
 
-        ImageView productQRCodeImageView = productsHolder.productQRCodeImageView;
-        TextView productName = productsHolder.productName;
-        TextView productType = productsHolder.productType;
-        TextView productID = productsHolder.productID;
+        ImageView productQRCodeImageView = ownedProductsHolder.productQRCodeImageView;
+        TextView productName = ownedProductsHolder.productName;
+        TextView productType = ownedProductsHolder.productType;
+        TextView productID = ownedProductsHolder.productID;
 
         productQRCodeImageView.setImageBitmap(MainActivity.getQRcodeBitmap(product.getProductKey()));
         productName.setText(product.getProductName());
         productType.setText(product.getProductType());
         productID.setText(product.getProductID());
-        productsHolder.productBatchID = product.getProductBatch();
-        productsHolder.productFactoryID = product.getProductFactoryID();
-        productsHolder.productManufacturingDate = product.getProductManufacturingDate();
-        productsHolder.productExpiryDate = product.getProductExpiryDate();
+        ownedProductsHolder.productBatchID = product.getProductBatch();
+        ownedProductsHolder.productFactoryID = product.getProductFactoryID();
+        ownedProductsHolder.productManufacturingDate = product.getProductManufacturingDate();
+        ownedProductsHolder.productExpiryDate = product.getProductExpiryDate();
     }
 
     @Override
@@ -62,14 +62,14 @@ public class ProductsAdapter extends RecyclerView.Adapter <RecyclerView.ViewHold
         return productsArray.size();
     }
 
-    private class ProductsHolder extends RecyclerView.ViewHolder{
+    private class OwnedProductsHolder extends RecyclerView.ViewHolder{
         private ImageView productQRCodeImageView;
         private LinearLayout productLinearLayout;
         private TextView productName, productType, productID;
         private Dialog qrcodePopup, productInfoPopup;
         private String productBatchID, productFactoryID, productManufacturingDate, productExpiryDate;
 
-        public ProductsHolder(@NonNull final View itemView) {
+        public OwnedProductsHolder(@NonNull final View itemView) {
             super(itemView);
 
             qrcodePopup = new Dialog(itemView.getContext());

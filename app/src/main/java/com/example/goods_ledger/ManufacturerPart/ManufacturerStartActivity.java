@@ -64,6 +64,8 @@ public class ManufacturerStartActivity extends AppCompatActivity {
 
                             MainActivity.getSavedValues().setProductsCount(Integer.toString(array.length()));
 
+                            Log.d("Response", array.length() + "  " + array.toString());
+
                             for (int i=0; i<array.length(); i++){
 
                                 JSONObject jsonObject = array.getJSONObject(i);
@@ -71,7 +73,9 @@ public class ManufacturerStartActivity extends AppCompatActivity {
                                 String productKeyResponse = jsonObject.getString("Key").trim();
                                 JSONObject object = jsonObject.getJSONObject("Record");
 
+                                String productOwnerAccountIDResponse = object.getString("ProductOwnerAccountID").trim();
                                 String productManufacturerIDResponse = object.getString("ProductManufacturerID").trim();
+                                String productManufacturerNameResponse = object.getString("ProductManufacturerName").trim();
                                 String productFactoryIDResponse = object.getString("ProductFactoryID").trim();
                                 String productIDResponse = object.getString("ProductID").trim();
                                 String productNameResponse = object.getString("ProductName").trim();
@@ -80,7 +84,7 @@ public class ManufacturerStartActivity extends AppCompatActivity {
                                 String productManufacturingDateResponse = object.getString("ProductManufacturingDate").trim();
                                 String productExpiryDateResponse = object.getString("ProductExpiryDate").trim();
 
-                                Product newProduct = new Product(productKeyResponse, productManufacturerIDResponse, productFactoryIDResponse, productIDResponse,
+                                Product newProduct = new Product(productKeyResponse, productOwnerAccountIDResponse, productManufacturerIDResponse, productManufacturerNameResponse, productFactoryIDResponse, productIDResponse,
                                         productNameResponse, productTypeResponse, productBatchResponse, productManufacturingDateResponse, productExpiryDateResponse);
 
                                 productsArray.add(newProduct);

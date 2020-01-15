@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_consumer_products"
-        android:name="com.example.goods_ledger.ConsumerPart.ui.ConsumerProductsFragment"
+        android:name="com.example.goods_ledger.ConsumerPart.ui.OwnedProducts.ConsumerProductsFragment"
         android:label="Products"
         tools:layout="@layout/fragment_consumer_products" >
     </fragment>

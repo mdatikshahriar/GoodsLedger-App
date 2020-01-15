@@ -153,4 +153,13 @@ public class SavedValues {
         editor.putString("PRODUCTS_COUNT", productsCount);
         editor.apply();
     }
+
+    public String getOwnedProductsCount() {
+        return sharedpreferences.getString("OWNED_PRODUCTS_COUNT", "N/A");
+    }
+
+    public void setOwnedProductsCount(String ownedProductsCount) {
+        editor.putString("OWNED_PRODUCTS_COUNT", ownedProductsCount);
+        editor.apply();
+    }
 }
