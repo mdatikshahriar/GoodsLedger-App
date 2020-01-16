@@ -26,9 +26,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -62,7 +68,7 @@ public class ConsumerHomeFragment extends Fragment{
     private TextView accountNameTextView, accountEmailTextView, ownedProductCountTextView, checkedProductsCountTextView;
     private LinearLayout accountSeeMoreLinearLayout, productsHereLinearLayout;
     private Button addProductsButton,checkProductsButton;
-    private Dialog addProductsPopup, checkProductsPopup, profilePicturePopup;
+    private Dialog addProductsPopup, checkProductsPopup, profilePicturePopup, productInfoPopup;
     private String accountKey;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -82,12 +88,14 @@ public class ConsumerHomeFragment extends Fragment{
         addProductsPopup = new Dialog(getActivity());
         checkProductsPopup = new Dialog(getActivity());
         profilePicturePopup = new Dialog(getActivity());
+        productInfoPopup = new Dialog(getActivity());
 
-        profilePictureImageView.setImageBitmap(ConsumerStartActivity.getAccountUsernameBitmap());
+        profilePictureImageView.setImageBitmap(ConsumerStartActivity.getAccountUserameBitmap());
 
         accountNameTextView.setText(MainActivity.getSavedValues().getAccountName());
         accountEmailTextView.setText(MainActivity.getSavedValues().getAccountEmail());
         ownedProductCountTextView.setText(MainActivity.getSavedValues().getOwnedProductsCount());
+        checkedProductsCountTextView.setText(MainActivity.getSavedValues().getQueriedProductsCount());
 
         accountSeeMoreLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,10 +128,10 @@ public class ConsumerHomeFragment extends Fragment{
             public void onClick(View view) {
                 final LinearLayout firstLinearLayout, secondLinearLayout;
                 final ZXingScannerView scannerView;
-                final Button cameraButton, ownProductButton;
+                final Button cameraButton, resultButton;
                 final ProgressBar progressBar;
                 final ImageView resultImageView;
-                final TextView resultTextView;
+                final TextView firstTitleTextView, secondTitleTextView, resultTextView, infoTextView;
 
                 addProductsPopup.setContentView(R.layout.popup_qrcode_scanner);
                 addProductsPopup.setCanceledOnTouchOutside(true);
@@ -132,15 +140,23 @@ public class ConsumerHomeFragment extends Fragment{
                 secondLinearLayout = addProductsPopup.findViewById(R.id.popup_qrcode_scanner_second_LinearLayout);
                 scannerView = addProductsPopup.findViewById(R.id.popup_qrcode_scanner_ZXingScannerView);
                 cameraButton = addProductsPopup.findViewById(R.id.popup_qrcode_scanner_camera_Button);
-                ownProductButton = addProductsPopup.findViewById(R.id.popup_qrcode_scanner_ownProduct_Button);
+                resultButton = addProductsPopup.findViewById(R.id.popup_qrcode_scanner_result_Button);
                 progressBar = addProductsPopup.findViewById(R.id.popup_qrcode_scanner_Progressbar);
                 resultImageView = addProductsPopup.findViewById(R.id.popup_qrcode_scanner_result_ImageView);
+                firstTitleTextView = addProductsPopup.findViewById(R.id.popup_qrcode_scanner_firstTitle_TextView);
+                secondTitleTextView = addProductsPopup.findViewById(R.id.popup_qrcode_scanner_secondTitle_TextView);
                 resultTextView = addProductsPopup.findViewById(R.id.popup_qrcode_scanner_result_TextView);
+                infoTextView = addProductsPopup.findViewById(R.id.popup_qrcode_scanner_info_TextView);
 
                 firstLinearLayout.setVisibility(View.VISIBLE);
                 secondLinearLayout.setVisibility(View.INVISIBLE);
                 scannerView.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
+
+                firstTitleTextView.setText("Add Product");
+                secondTitleTextView.setText("Add Product");
+                infoTextView.setText("In order to add a product first click the camera button below and then scan the QR code of the product with your phone's camera.\n Be sure to give camera permission before!");
+                resultButton.setText("Own Product");
 
                 addProductsPopup.show();
                 addProductsPopup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -223,7 +239,7 @@ public class ConsumerHomeFragment extends Fragment{
 
                                                             resultTextView.setText(resultText);
                                                             resultImageView.setImageResource(R.drawable.real);
-                                                            ownProductButton.setVisibility(View.INVISIBLE);
+                                                            resultButton.setVisibility(View.INVISIBLE);
 
                                                             secondLinearLayout.setVisibility(View.VISIBLE);
                                                         } else if(productOwnerAccountIDResponse.equals("*#@%")){
@@ -233,9 +249,9 @@ public class ConsumerHomeFragment extends Fragment{
 
                                                             resultTextView.setText(resultText);
                                                             resultImageView.setImageResource(R.drawable.real);
-                                                            ownProductButton.setVisibility(View.VISIBLE);
+                                                            resultButton.setVisibility(View.VISIBLE);
 
-                                                            ownProductButton.setOnClickListener(new View.OnClickListener() {
+                                                            resultButton.setOnClickListener(new View.OnClickListener() {
                                                                 @Override
                                                                 public void onClick(View v) {
                                                                     final String productOwnerAccountID = MainActivity.getSavedValues().getAccountKey();
@@ -255,7 +271,7 @@ public class ConsumerHomeFragment extends Fragment{
                                                                                         ConsumerStartActivity.getOwnedProductsArray().add(newOwnedProduct);
                                                                                         MainActivity.getSavedValues().setOwnedProductsCount(Integer.toString(1 + Integer.parseInt(MainActivity.getSavedValues().getOwnedProductsCount())));
 
-                                                                                        ownedProductCountTextView.setText(MainActivity.getSavedValues().getProductsCount());
+                                                                                        ownedProductCountTextView.setText(MainActivity.getSavedValues().getOwnedProductsCount());
 
                                                                                         Toast.makeText(getActivity(), "Product owned successfully!", Toast.LENGTH_SHORT).show();
 
@@ -301,7 +317,7 @@ public class ConsumerHomeFragment extends Fragment{
 
                                                             resultTextView.setText(resultText);
                                                             resultImageView.setImageResource(R.drawable.caution);
-                                                            ownProductButton.setVisibility(View.INVISIBLE);
+                                                            resultButton.setVisibility(View.INVISIBLE);
 
                                                             secondLinearLayout.setVisibility(View.VISIBLE);
                                                         }
@@ -315,7 +331,7 @@ public class ConsumerHomeFragment extends Fragment{
 
                                                         resultTextView.setText(resultText);
                                                         resultImageView.setImageResource(R.drawable.counterfeit);
-                                                        ownProductButton.setVisibility(View.INVISIBLE);
+                                                        resultButton.setVisibility(View.INVISIBLE);
 
                                                         secondLinearLayout.setVisibility(View.VISIBLE);
                                                     }
@@ -323,8 +339,27 @@ public class ConsumerHomeFragment extends Fragment{
                                             },
                                             new Response.ErrorListener() {
                                                 @Override
-                                                public void onErrorResponse(VolleyError error) {
-                                                    Log.d("responseError", error.toString());
+                                                public void onErrorResponse(VolleyError volleyError) {
+                                                    Log.d("responseError", volleyError.toString());
+
+                                                    progressBar.setVisibility(View.GONE);
+
+                                                    String message = null;
+                                                    if (volleyError instanceof NetworkError) {
+                                                        message = "Cannot connect to Internet...Please check your connection!";
+                                                    } else if (volleyError instanceof ServerError) {
+                                                        message = "The server could not be found. Please try again after some time!!";
+                                                    } else if (volleyError instanceof AuthFailureError) {
+                                                        message = "Cannot connect to Internet...Please check your connection!";
+                                                    } else if (volleyError instanceof ParseError) {
+                                                        message = "Parsing error! Please try again after some time!!";
+                                                    } else if (volleyError instanceof NoConnectionError) {
+                                                        message = "Cannot connect to Internet...Please check your connection!";
+                                                    } else if (volleyError instanceof TimeoutError) {
+                                                        message = "Connection TimeOut! Please check your internet connection.";
+                                                    }
+
+                                                    Toast.makeText(getActivity() ,message, Toast.LENGTH_LONG).show();
                                                 }
                                             })
                                     {
@@ -348,7 +383,7 @@ public class ConsumerHomeFragment extends Fragment{
 
                                     resultTextView.setText(resultText);
                                     resultImageView.setImageResource(R.drawable.counterfeit);
-                                    ownProductButton.setVisibility(View.INVISIBLE);
+                                    resultButton.setVisibility(View.INVISIBLE);
 
                                     secondLinearLayout.setVisibility(View.VISIBLE);
                                 }
@@ -363,17 +398,47 @@ public class ConsumerHomeFragment extends Fragment{
         checkProductsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final LinearLayout firstLinearLayout, secondLinearLayout;
                 final ZXingScannerView scannerView;
-                Button cameraButton;
+                final Button cameraButton, resultButton;
+                final ProgressBar progressBar;
+                final ImageView resultImageView;
+                final TextView firstTitleTextView, secondTitleTextView, resultTextView, infoTextView;
 
                 checkProductsPopup.setContentView(R.layout.popup_qrcode_scanner);
                 checkProductsPopup.setCanceledOnTouchOutside(true);
 
+
+                firstLinearLayout = checkProductsPopup.findViewById(R.id.popup_qrcode_scanner_first_LinearLayout);
+                secondLinearLayout = checkProductsPopup.findViewById(R.id.popup_qrcode_scanner_second_LinearLayout);
                 scannerView = checkProductsPopup.findViewById(R.id.popup_qrcode_scanner_ZXingScannerView);
                 cameraButton = checkProductsPopup.findViewById(R.id.popup_qrcode_scanner_camera_Button);
+                resultButton = checkProductsPopup.findViewById(R.id.popup_qrcode_scanner_result_Button);
+                progressBar = checkProductsPopup.findViewById(R.id.popup_qrcode_scanner_Progressbar);
+                resultImageView = checkProductsPopup.findViewById(R.id.popup_qrcode_scanner_result_ImageView);
+                firstTitleTextView = checkProductsPopup.findViewById(R.id.popup_qrcode_scanner_firstTitle_TextView);
+                secondTitleTextView = checkProductsPopup.findViewById(R.id.popup_qrcode_scanner_secondTitle_TextView);
+                resultTextView = checkProductsPopup.findViewById(R.id.popup_qrcode_scanner_result_TextView);
+                infoTextView = checkProductsPopup.findViewById(R.id.popup_qrcode_scanner_info_TextView);
+
+                firstLinearLayout.setVisibility(View.VISIBLE);
+                secondLinearLayout.setVisibility(View.INVISIBLE);
+                scannerView.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+
+                firstTitleTextView.setText("Check Product");
+                secondTitleTextView.setText("Check Product");
+                infoTextView.setText("In order to check a product first click the camera button below and then scan the QR code of the product with your phone's camera.\n Be sure to give camera permission before!");
+                resultButton.setText("See Details");
 
                 checkProductsPopup.show();
                 checkProductsPopup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                checkProductsPopup.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        scannerView.stopCamera();
+                    }
+                });
 
                 Dexter.withActivity(getActivity())
                         .withPermission(Manifest.permission.CAMERA)
@@ -398,6 +463,7 @@ public class ConsumerHomeFragment extends Fragment{
                 cameraButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        firstLinearLayout.setVisibility(View.INVISIBLE);
                         scannerView.setVisibility(View.VISIBLE);
                         scannerView.startCamera();
                         scannerView.setResultHandler(new ZXingScannerView.ResultHandler() {
@@ -405,9 +471,182 @@ public class ConsumerHomeFragment extends Fragment{
                             public void handleResult(Result rawResult) {
                                 scannerView.stopCamera();
                                 scannerView.setVisibility(View.INVISIBLE);
-                                Toast.makeText(getActivity(), rawResult.getText(), Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.VISIBLE);
+
+                                String qrScannerResult = rawResult.getText().trim();
+
+                                if(qrScannerResult.length() == 60){
+
+                                    final String productCode = qrScannerResult;
+                                    Log.d("Code", productCode);
+
+                                    StringRequest stringRequest = new StringRequest(Request.Method.POST, MainActivity.getLinks().getURL_queryProductbyCode(),
+                                            new Response.Listener<String>() {
+                                                @Override
+                                                public void onResponse(String response) {
+                                                    try {
+                                                        Log.d("Response", response);
+                                                        JSONArray array = new JSONArray(response);
+
+                                                        JSONObject jsonObject = array.getJSONObject(0);
+
+                                                        final String productKeyResponse = jsonObject.getString("Key").trim();
+                                                        JSONObject object = jsonObject.getJSONObject("Record");
+
+                                                        final String productOwnerAccountIDResponse = object.getString("ProductOwnerAccountID").trim();
+                                                        final String productManufacturerIDResponse = object.getString("ProductManufacturerID").trim();
+                                                        final String productManufacturerNameResponse = object.getString("ProductManufacturerName").trim();
+                                                        final String productFactoryIDResponse = object.getString("ProductFactoryID").trim();
+                                                        final String productIDResponse = object.getString("ProductID").trim();
+                                                        final String productNameResponse = object.getString("ProductName").trim();
+                                                        final String productTypeResponse = object.getString("ProductType").trim();
+                                                        final String productBatchResponse = object.getString("ProductBatch").trim();
+                                                        final String productManufacturingDateResponse = object.getString("ProductManufacturingDate").trim();
+                                                        final String productExpiryDateResponse = object.getString("ProductExpiryDate").trim();
+
+                                                        Product newQueriedProduct = new Product(productKeyResponse, productOwnerAccountIDResponse, productManufacturerIDResponse, productManufacturerNameResponse,productFactoryIDResponse, productIDResponse,
+                                                                productNameResponse, productTypeResponse, productBatchResponse, productManufacturingDateResponse, productExpiryDateResponse);
+
+                                                        ConsumerStartActivity.getQueriedProductsArray().add(newQueriedProduct);
+                                                        MainActivity.getSavedValues().setQueriedProductsCount(Integer.toString(1 + Integer.parseInt(MainActivity.getSavedValues().getQueriedProductsCount())));
+
+                                                        checkedProductsCountTextView.setText(MainActivity.getSavedValues().getQueriedProductsCount());
+
+                                                        resultButton.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
+                                                                checkProductsPopup.dismiss();
+
+                                                                ImageView productQRCodeImage;
+                                                                TextView productIDTextView, productNameTextView, productTypeTextView, productBatchIDTextView,
+                                                                        productFactoryIDTextView, productManufacturingDateTextView, productExpiryDateTextView;
+
+                                                                productInfoPopup.setContentView(R.layout.popup_product_info);
+                                                                productInfoPopup.setCanceledOnTouchOutside(true);
+
+                                                                productQRCodeImage = productInfoPopup.findViewById(R.id.popup_product_info_productQRCode_ImageView);
+                                                                productIDTextView = productInfoPopup.findViewById(R.id.popup_product_info_productID_TextView);
+                                                                productNameTextView = productInfoPopup.findViewById(R.id.popup_product_info_productName_TextView);
+                                                                productTypeTextView = productInfoPopup.findViewById(R.id.popup_product_info_productType_TextView);
+                                                                productBatchIDTextView = productInfoPopup.findViewById(R.id.popup_product_info_productBatchID_TextView);
+                                                                productFactoryIDTextView = productInfoPopup.findViewById(R.id.popup_product_info_productFactoryID_TextView);
+                                                                productManufacturingDateTextView = productInfoPopup.findViewById(R.id.popup_product_info_productManufacturingDate_TextView);
+                                                                productExpiryDateTextView = productInfoPopup.findViewById(R.id.popup_product_info_productExpiryDate_TextView);
+
+                                                                productQRCodeImage.setImageBitmap(MainActivity.getQRcodeBitmap(productCode));
+                                                                productIDTextView.setText(productIDResponse);
+                                                                productNameTextView.setText(productNameResponse);
+                                                                productTypeTextView.setText(productTypeResponse);
+                                                                productBatchIDTextView.setText(productBatchResponse);
+                                                                productFactoryIDTextView.setText(productFactoryIDResponse);
+                                                                productManufacturingDateTextView.setText(productManufacturingDateResponse);
+                                                                productExpiryDateTextView.setText(productExpiryDateResponse);
+
+                                                                productInfoPopup.show();
+                                                                productInfoPopup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                                            }
+                                                        });
+
+                                                        if(productOwnerAccountIDResponse.equals(accountKey)){
+                                                            String resultText = "The product is a real product.\n It's manufactured by " + productManufacturerNameResponse + ".\n You are the owner of this product.\n Want to see details of this product? Click the button below.";
+
+                                                            progressBar.setVisibility(View.GONE);
+
+                                                            resultTextView.setText(resultText);
+                                                            resultImageView.setImageResource(R.drawable.real);
+                                                            resultButton.setVisibility(View.VISIBLE);
+
+                                                            secondLinearLayout.setVisibility(View.VISIBLE);
+                                                        } else if(productOwnerAccountIDResponse.equals("*#@%")){
+                                                            String resultText = "The product is a real product.\n It's manufactured by " + productManufacturerNameResponse + ".\n The product hasn't been owned by anyone yet.\n Want to see details of this product? Click the button below.";
+
+                                                            progressBar.setVisibility(View.GONE);
+
+                                                            resultTextView.setText(resultText);
+                                                            resultImageView.setImageResource(R.drawable.real);
+                                                            resultButton.setVisibility(View.VISIBLE);
+
+                                                            secondLinearLayout.setVisibility(View.VISIBLE);
+                                                        } else{
+                                                            String resultText = "The product is manufactured by " + productManufacturerNameResponse + ".\n It's owned by someone else!\n If you claim to own it, then perhaps your product is a counterfeit product.";
+
+                                                            progressBar.setVisibility(View.GONE);
+
+                                                            resultTextView.setText(resultText);
+                                                            resultImageView.setImageResource(R.drawable.counterfeit);
+                                                            resultButton.setVisibility(View.INVISIBLE);
+
+                                                            secondLinearLayout.setVisibility(View.VISIBLE);
+                                                        }
+
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                        Log.d("catchError", e.toString());
+
+                                                        String resultText = "The product is a counterfeit product.";
+                                                        progressBar.setVisibility(View.GONE);
+
+                                                        resultTextView.setText(resultText);
+                                                        resultImageView.setImageResource(R.drawable.counterfeit);
+                                                        resultButton.setVisibility(View.INVISIBLE);
+
+                                                        secondLinearLayout.setVisibility(View.VISIBLE);
+                                                    }
+                                                }
+                                            },
+                                            new Response.ErrorListener() {
+                                                @Override
+                                                public void onErrorResponse(VolleyError volleyError) {
+                                                    Log.d("responseError", volleyError.toString());
+
+                                                    progressBar.setVisibility(View.GONE);
+
+                                                    String message = null;
+                                                    if (volleyError instanceof NetworkError) {
+                                                        message = "Cannot connect to Internet...Please check your connection!";
+                                                    } else if (volleyError instanceof ServerError) {
+                                                        message = "The server could not be found. Please try again after some time!!";
+                                                    } else if (volleyError instanceof AuthFailureError) {
+                                                        message = "Cannot connect to Internet...Please check your connection!";
+                                                    } else if (volleyError instanceof ParseError) {
+                                                        message = "Parsing error! Please try again after some time!!";
+                                                    } else if (volleyError instanceof NoConnectionError) {
+                                                        message = "Cannot connect to Internet...Please check your connection!";
+                                                    } else if (volleyError instanceof TimeoutError) {
+                                                        message = "Connection TimeOut! Please check your internet connection.";
+                                                    }
+
+                                                    Toast.makeText(getActivity() ,message, Toast.LENGTH_LONG).show();
+                                                }
+                                            })
+                                    {
+                                        @Override
+                                        protected Map<String, String> getParams() {
+                                            Map<String, String> params = new HashMap<>();
+                                            params.put("productCode", productCode);
+                                            return params;
+                                        }
+                                    };
+
+                                    stringRequest.setRetryPolicy(MainActivity.getRetryPolicy());
+
+                                    RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+                                    requestQueue.add(stringRequest);
+
+                                }
+                                else{
+                                    String resultText = "The code you scanned doesn't seem to be a valid code.";
+                                    progressBar.setVisibility(View.GONE);
+
+                                    resultTextView.setText(resultText);
+                                    resultImageView.setImageResource(R.drawable.counterfeit);
+                                    resultButton.setVisibility(View.INVISIBLE);
+
+                                    secondLinearLayout.setVisibility(View.VISIBLE);
+                                }
                             }
                         });
+
                     }
                 });
             }

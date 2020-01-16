@@ -31,7 +31,7 @@ public class ConsumerAccountInfoActivity extends AppCompatActivity {
         accountPhoneNoTextView = findViewById(R.id.activity_consumer_account_info_accountPhoneNo_TextView);
         editButton = findViewById(R.id.activity_consumer_account_info_edit_Button);
 
-        profilePictureImageView.setImageBitmap(ConsumerStartActivity.getAccountUsernameBitmap());
+        profilePictureImageView.setImageBitmap(ConsumerStartActivity.getAccountUserameBitmap());
 
         accountTypeTextView.setText(MainActivity.getSavedValues().getAccountType());
         accountNameTextView.setText(MainActivity.getSavedValues().getAccountName());

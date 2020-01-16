@@ -1,17 +1,28 @@
 package com.example.goods_ledger.ManufacturerPart;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.goods_ledger.Assets.Factory;
 import com.example.goods_ledger.Assets.Product;
+import com.example.goods_ledger.ConsumerPart.ConsumerStartActivity;
+import com.example.goods_ledger.LoginActivity;
 import com.example.goods_ledger.MainActivity;
 import com.example.goods_ledger.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -53,9 +64,83 @@ public class ManufacturerStartActivity extends AppCompatActivity {
         productsArray = new ArrayList<>();
         factoriesArray = new ArrayList<>();
 
-        final String productManufacturerID = MainActivity.getSavedValues().getManufacturerKey();
+        final String manufacturerAccountID = MainActivity.getSavedValues().getAccountKey();
 
-        StringRequest stringRequest1 = new StringRequest(Request.Method.POST, MainActivity.getLinks().getURL_queryProductbyManufacturerID(),
+        StringRequest stringRequest1 = new StringRequest(Request.Method.POST, MainActivity.getLinks().getURL_queryManufacturerbyAccountID(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            Log.d("Response", response);
+
+                            JSONObject object = jsonObject.getJSONObject("Record");
+
+                            String manufacturerKeyResponse = jsonObject.getString("Key").trim();
+
+                            String manufacturerAccountIDResponse = object.getString("ManufacturerAccountID").trim();
+                            String manufacturerNameResponse = object.getString("ManufacturerName").trim();
+                            String manufacturerTradeLicenceIDResponse = object.getString("ManufacturerTradeLicenceID").trim();
+                            String manufacturerLocationResponse = object.getString("ManufacturerLocation").trim();
+                            String manufacturerFoundingDateResponse = object.getString("ManufacturerFoundingDate").trim();
+
+                            MainActivity.getSavedValues().setManufacturerKey(manufacturerKeyResponse);
+                            MainActivity.getSavedValues().setManufacturerAccountID(manufacturerAccountIDResponse);
+                            MainActivity.getSavedValues().setManufacturerName(manufacturerNameResponse);
+                            MainActivity.getSavedValues().setManufacturerTradeLicenceID(manufacturerTradeLicenceIDResponse);
+                            MainActivity.getSavedValues().setManufacturerLocation(manufacturerLocationResponse);
+                            MainActivity.getSavedValues().setManufacturerFoundingDate(manufacturerFoundingDateResponse);
+                        }
+                        catch (JSONException e){
+                            e.printStackTrace();
+                            Log.d("catchError", e.toString());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.d("responseError", volleyError.toString());
+
+                        String message = null;
+                        if (volleyError instanceof NetworkError) {
+                            message = "Cannot connect to Internet...Please check your connection!";
+                        } else if (volleyError instanceof ServerError) {
+                            message = "The server could not be found. Please try again after some time!!";
+                        } else if (volleyError instanceof AuthFailureError) {
+                            message = "Cannot connect to Internet...Please check your connection!";
+                        } else if (volleyError instanceof ParseError) {
+                            message = "Parsing error! Please try again after some time!!";
+                        } else if (volleyError instanceof NoConnectionError) {
+                            message = "Cannot connect to Internet...Please check your connection!";
+                        } else if (volleyError instanceof TimeoutError) {
+                            message = "Connection TimeOut! Please check your internet connection.";
+                        }
+
+                        startActivity(new Intent(ManufacturerStartActivity.this, LoginActivity.class));
+                        finish();
+
+                        Toast.makeText(getApplicationContext() ,message, Toast.LENGTH_LONG).show();
+                    }
+                })
+        {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("manufacturerAccountID", manufacturerAccountID);
+                return params;
+            }
+        };
+
+        stringRequest1.setRetryPolicy(MainActivity.getRetryPolicy());
+
+        RequestQueue requestQueue1 = Volley.newRequestQueue(ManufacturerStartActivity.this);
+        requestQueue1.add(stringRequest1);
+
+        final String productManufacturerID = MainActivity.getSavedValues().getAccountOwnerManufacturerID();
+
+        StringRequest stringRequest2 = new StringRequest(Request.Method.POST, MainActivity.getLinks().getURL_queryProductbyManufacturerID(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -63,8 +148,6 @@ public class ManufacturerStartActivity extends AppCompatActivity {
                             JSONArray array = new JSONArray(response);
 
                             MainActivity.getSavedValues().setProductsCount(Integer.toString(array.length()));
-
-                            Log.d("Response", array.length() + "  " + array.toString());
 
                             for (int i=0; i<array.length(); i++){
 
@@ -97,8 +180,25 @@ public class ManufacturerStartActivity extends AppCompatActivity {
                 },
                 new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("responseError", error.toString());
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.d("responseError", volleyError.toString());
+
+                        String message = null;
+                        if (volleyError instanceof NetworkError) {
+                            message = "Cannot connect to Internet...Please check your connection!";
+                        } else if (volleyError instanceof ServerError) {
+                            message = "The server could not be found. Please try again after some time!!";
+                        } else if (volleyError instanceof AuthFailureError) {
+                            message = "Cannot connect to Internet...Please check your connection!";
+                        } else if (volleyError instanceof ParseError) {
+                            message = "Parsing error! Please try again after some time!!";
+                        } else if (volleyError instanceof NoConnectionError) {
+                            message = "Cannot connect to Internet...Please check your connection!";
+                        } else if (volleyError instanceof TimeoutError) {
+                            message = "Connection TimeOut! Please check your internet connection.";
+                        }
+
+                        Toast.makeText(getApplicationContext() ,message, Toast.LENGTH_LONG).show();
                     }
                 })
         {
@@ -110,14 +210,14 @@ public class ManufacturerStartActivity extends AppCompatActivity {
             }
         };
 
-        stringRequest1.setRetryPolicy(MainActivity.getRetryPolicy());
+        stringRequest2.setRetryPolicy(MainActivity.getRetryPolicy());
 
-        RequestQueue requestQueue1 = Volley.newRequestQueue(ManufacturerStartActivity.this);
-        requestQueue1.add(stringRequest1);
+        RequestQueue requestQueue2 = Volley.newRequestQueue(ManufacturerStartActivity.this);
+        requestQueue2.add(stringRequest2);
 
-        final String factoryManufacturerID = MainActivity.getSavedValues().getManufacturerKey();
+        final String factoryManufacturerID = MainActivity.getSavedValues().getAccountOwnerManufacturerID();
 
-        StringRequest stringRequest2 = new StringRequest(Request.Method.POST, MainActivity.getLinks().getURL_queryFactorybyManufacturerID(),
+        StringRequest stringRequest3 = new StringRequest(Request.Method.POST, MainActivity.getLinks().getURL_queryFactorybyManufacturerID(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -149,8 +249,25 @@ public class ManufacturerStartActivity extends AppCompatActivity {
                 },
                 new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("responseError", error.toString());
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.d("responseError", volleyError.toString());
+
+                        String message = null;
+                        if (volleyError instanceof NetworkError) {
+                            message = "Cannot connect to Internet...Please check your connection!";
+                        } else if (volleyError instanceof ServerError) {
+                            message = "The server could not be found. Please try again after some time!!";
+                        } else if (volleyError instanceof AuthFailureError) {
+                            message = "Cannot connect to Internet...Please check your connection!";
+                        } else if (volleyError instanceof ParseError) {
+                            message = "Parsing error! Please try again after some time!!";
+                        } else if (volleyError instanceof NoConnectionError) {
+                            message = "Cannot connect to Internet...Please check your connection!";
+                        } else if (volleyError instanceof TimeoutError) {
+                            message = "Connection TimeOut! Please check your internet connection.";
+                        }
+
+                        Toast.makeText(getApplicationContext() ,message, Toast.LENGTH_LONG).show();
                     }
                 })
         {
@@ -162,10 +279,10 @@ public class ManufacturerStartActivity extends AppCompatActivity {
             }
         };
 
-        stringRequest2.setRetryPolicy(MainActivity.getRetryPolicy());
+        stringRequest3.setRetryPolicy(MainActivity.getRetryPolicy());
 
-        RequestQueue requestQueue2 = Volley.newRequestQueue(ManufacturerStartActivity.this);
-        requestQueue2.add(stringRequest2);
+        RequestQueue requestQueue3 = Volley.newRequestQueue(ManufacturerStartActivity.this);
+        requestQueue3.add(stringRequest3);
     }
 
     public static Bitmap getManufacturerKeyBitmap() {

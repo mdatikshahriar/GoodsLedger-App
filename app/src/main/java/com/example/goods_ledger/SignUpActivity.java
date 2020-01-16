@@ -15,9 +15,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -65,6 +71,7 @@ public class SignUpActivity extends AppCompatActivity {
                 final String accountEmail = email.getText().toString();
                 final String accountPassword = password.getText().toString();
                 final String accountConfirmedPassword = confirmedPassword.getText().toString();
+                final String accountOwnerManufacturerID = "*#@%";
 
                 if(accountName.isEmpty()){
                     fullName.setError("Please type something!");
@@ -106,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     String accountNameResponse = object.getString("accountName").trim();
                                     String accountUsernameResponse = object.getString("accountUsername").trim();
                                     String accountEmailResponse = object.getString("accountEmail").trim();
-                                    String accountIsManufacturerAssignedResponse = object.getString("accountIsManufacturerAssigned").trim();
+                                    String accountOwnerManufacturerIDResponse = object.getString("accountOwnerManufacturerID").trim();
 
                                     MainActivity.getSavedValues().setAccountKey(accountKeyResponse);
                                     MainActivity.getSavedValues().setAccountToken(accountTokenResponse);
@@ -114,7 +121,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     MainActivity.getSavedValues().setAccountName(accountNameResponse);
                                     MainActivity.getSavedValues().setAccountUsername(accountUsernameResponse);
                                     MainActivity.getSavedValues().setAccountEmail(accountEmailResponse);
-                                    MainActivity.getSavedValues().setAccountIsManufacturerAssigned(accountIsManufacturerAssignedResponse);
+                                    MainActivity.getSavedValues().setAccountOwnerManufacturerID(accountOwnerManufacturerIDResponse);
 
                                     Toast.makeText(SignUpActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
 
@@ -138,10 +145,27 @@ public class SignUpActivity extends AppCompatActivity {
                         },
                         new Response.ErrorListener() {
                             @Override
-                            public void onErrorResponse(VolleyError error) {
+                            public void onErrorResponse(VolleyError volleyError) {
+                                Log.d("responseError", volleyError.toString());
+
                                 progressBar.setVisibility(View.GONE);
-                                Toast.makeText(SignUpActivity.this, "Registration failed! Error: " + error.toString(), Toast.LENGTH_SHORT).show();
-                                Log.d("responseError", error.toString());
+
+                                String message = null;
+                                if (volleyError instanceof NetworkError) {
+                                    message = "Cannot connect to Internet...Please check your connection!";
+                                } else if (volleyError instanceof ServerError) {
+                                    message = "The server could not be found. Please try again after some time!!";
+                                } else if (volleyError instanceof AuthFailureError) {
+                                    message = "Cannot connect to Internet...Please check your connection!";
+                                } else if (volleyError instanceof ParseError) {
+                                    message = "Parsing error! Please try again after some time!!";
+                                } else if (volleyError instanceof NoConnectionError) {
+                                    message = "Cannot connect to Internet...Please check your connection!";
+                                } else if (volleyError instanceof TimeoutError) {
+                                    message = "Connection TimeOut! Please check your internet connection.";
+                                }
+
+                                Toast.makeText(getApplicationContext() ,message, Toast.LENGTH_LONG).show();
                             }
                         })
                 {
@@ -154,6 +178,7 @@ public class SignUpActivity extends AppCompatActivity {
                         params.put("accountEmail", accountEmail);
                         params.put("accountPassword", accountPassword);
                         params.put("accountConfirmedPassword", accountConfirmedPassword);
+                        params.put("accountOwnerManufacturerID", accountOwnerManufacturerID);
                         return params;
                     }
                 };

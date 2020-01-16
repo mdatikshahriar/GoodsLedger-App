@@ -12,9 +12,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -81,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                                     String accountNameResponse = object.getString("AccountName").trim();
                                     String accountUsernameResponse = object.getString("AccountUsername").trim();
                                     String accountEmailResponse = object.getString("AccountEmail").trim();
-                                    String accountIsManufacturerAssignedResponse = object.getString("AccountIsManufacturerAssigned").trim();
+                                    String accountOwnerManufacturerIDResponse = object.getString("AccountOwnerManufacturerID").trim();
 
                                     MainActivity.getSavedValues().setAccountKey(accountKeyResponse);
                                     MainActivity.getSavedValues().setAccountToken(accountTokenResponse);
@@ -89,20 +95,20 @@ public class LoginActivity extends AppCompatActivity {
                                     MainActivity.getSavedValues().setAccountName(accountNameResponse);
                                     MainActivity.getSavedValues().setAccountUsername(accountUsernameResponse);
                                     MainActivity.getSavedValues().setAccountEmail(accountEmailResponse);
-                                    MainActivity.getSavedValues().setAccountIsManufacturerAssigned(accountIsManufacturerAssignedResponse);
+                                    MainActivity.getSavedValues().setAccountOwnerManufacturerID(accountOwnerManufacturerIDResponse);
 
                                     Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
 
                                     if(accountTypeResponse.equals("Manufacturer")){
 
-                                        if(accountIsManufacturerAssignedResponse.equals("true")){
-
-                                            startActivity(new Intent(LoginActivity.this, ManufacturerStartActivity.class));
-                                            finish();
-                                        }
-                                        else if (accountIsManufacturerAssignedResponse.equals("false")){
+                                        if(accountOwnerManufacturerIDResponse.equals("*#@%")){
 
                                             startActivity(new Intent(LoginActivity.this, AddManufacturerActivity.class));
+                                            finish();
+                                        }
+                                        else {
+
+                                            startActivity(new Intent(LoginActivity.this, ManufacturerStartActivity.class));
                                             finish();
                                         }
                                     }
@@ -120,10 +126,27 @@ public class LoginActivity extends AppCompatActivity {
                         },
                         new Response.ErrorListener() {
                             @Override
-                            public void onErrorResponse(VolleyError error) {
+                            public void onErrorResponse(VolleyError volleyError) {
+                                Log.d("responseError", volleyError.toString());
+
                                 progressBar.setVisibility(View.GONE);
-                                Toast.makeText(LoginActivity.this, "Login failed! Error: " + error.toString(), Toast.LENGTH_SHORT).show();
-                                Log.d("responseError", error.toString());
+
+                                String message = null;
+                                if (volleyError instanceof NetworkError) {
+                                    message = "Cannot connect to Internet...Please check your connection!";
+                                } else if (volleyError instanceof ServerError) {
+                                    message = "The server could not be found. Please try again after some time!!";
+                                } else if (volleyError instanceof AuthFailureError) {
+                                    message = "Cannot connect to Internet...Please check your connection!";
+                                } else if (volleyError instanceof ParseError) {
+                                    message = "Parsing error! Please try again after some time!!";
+                                } else if (volleyError instanceof NoConnectionError) {
+                                    message = "Cannot connect to Internet...Please check your connection!";
+                                } else if (volleyError instanceof TimeoutError) {
+                                    message = "Connection TimeOut! Please check your internet connection.";
+                                }
+
+                                Toast.makeText(getApplicationContext() ,message, Toast.LENGTH_LONG).show();
                             }
                         })
                 {

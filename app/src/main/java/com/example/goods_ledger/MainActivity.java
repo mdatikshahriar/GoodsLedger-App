@@ -6,15 +6,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -57,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         links = new Links();
 
-        retryPolicy = new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        retryPolicy = new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
         accountToken = savedValues.getAccountToken();
 
@@ -65,85 +74,111 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, links.getURL_queryAccountbyToken(),
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Log.d("Response", response);
-                                try {
-                                    JSONObject jsonObject = new JSONObject(response);
+                    if(isOnline()){
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, links.getURL_queryAccountbyToken(),
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    Log.d("Response", response);
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response);
 
-                                    JSONObject object = jsonObject.getJSONObject("Record");
+                                        JSONObject object = jsonObject.getJSONObject("Record");
 
-                                    String accountKeyResponse = jsonObject.getString("Key").trim();
-                                    String accountTokenResponse = object.getString("AccountToken").trim();
-                                    String accountTypeResponse = object.getString("AccountType").trim();
-                                    String accountNameResponse = object.getString("AccountName").trim();
-                                    String accountUsernameResponse = object.getString("AccountUsername").trim();
-                                    String accountEmailResponse = object.getString("AccountEmail").trim();
-                                    String accountIsManufacturerAssignedResponse = object.getString("AccountIsManufacturerAssigned").trim();
+                                        String accountKeyResponse = jsonObject.getString("Key").trim();
+                                        String accountTokenResponse = object.getString("AccountToken").trim();
+                                        String accountTypeResponse = object.getString("AccountType").trim();
+                                        String accountNameResponse = object.getString("AccountName").trim();
+                                        String accountUsernameResponse = object.getString("AccountUsername").trim();
+                                        String accountEmailResponse = object.getString("AccountEmail").trim();
+                                        String accountOwnerManufacturerIDResponse = object.getString("AccountOwnerManufacturerID").trim();
 
-                                    MainActivity.getSavedValues().setAccountKey(accountKeyResponse);
-                                    MainActivity.getSavedValues().setAccountToken(accountTokenResponse);
-                                    MainActivity.getSavedValues().setAccountType(accountTypeResponse);
-                                    MainActivity.getSavedValues().setAccountName(accountNameResponse);
-                                    MainActivity.getSavedValues().setAccountUsername(accountUsernameResponse);
-                                    MainActivity.getSavedValues().setAccountEmail(accountEmailResponse);
-                                    MainActivity.getSavedValues().setAccountIsManufacturerAssigned(accountIsManufacturerAssignedResponse);
+                                        getSavedValues().setAccountKey(accountKeyResponse);
+                                        getSavedValues().setAccountToken(accountTokenResponse);
+                                        getSavedValues().setAccountType(accountTypeResponse);
+                                        getSavedValues().setAccountName(accountNameResponse);
+                                        getSavedValues().setAccountUsername(accountUsernameResponse);
+                                        getSavedValues().setAccountEmail(accountEmailResponse);
+                                        getSavedValues().setAccountOwnerManufacturerID(accountOwnerManufacturerIDResponse);
 
-                                    if (accountToken.equals("")){
+                                        if (accountToken.equals("*#@%")){
 
+                                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                                            finish();
+                                        }
+                                        else if(accountTypeResponse.equals("Manufacturer")){
+
+                                            if(accountOwnerManufacturerIDResponse.equals("*#@%")){
+
+                                                startActivity(new Intent(MainActivity.this, AddManufacturerActivity.class));
+                                                finish();
+                                            }
+                                            else {
+
+                                                startActivity(new Intent(MainActivity.this, ManufacturerStartActivity.class));
+                                                finish();
+                                            }
+                                        }
+                                        else if(accountTypeResponse.equals("Consumer")){
+
+                                            startActivity(new  Intent(MainActivity.this, ConsumerStartActivity.class));
+                                            finish();
+                                        }
+                                    }
+                                    catch (JSONException e){
+                                        e.printStackTrace();
+                                        Log.d("catchError", e.toString());
                                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                                         finish();
                                     }
-                                    else if(accountTypeResponse.equals("Manufacturer")){
-
-                                        if(accountIsManufacturerAssignedResponse.equals("true")){
-
-                                            startActivity(new Intent(MainActivity.this, ManufacturerStartActivity.class));
-                                            finish();
-                                        }
-                                        else if (accountIsManufacturerAssignedResponse.equals("false")){
-
-                                            startActivity(new Intent(MainActivity.this, AddManufacturerActivity.class));
-                                            finish();
-                                        }
-                                    }
-                                    else if(accountTypeResponse.equals("Consumer")){
-
-                                        startActivity(new  Intent(MainActivity.this, ConsumerStartActivity.class));
-                                        finish();
-                                    }
                                 }
-                                catch (JSONException e){
-                                    e.printStackTrace();
-                                    Log.d("catchError", e.toString());
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError volleyError) {
+                                    Log.d("responseError", volleyError.toString());
+
+                                    String message = null;
+                                    if (volleyError instanceof NetworkError) {
+                                        message = "Cannot connect to Internet...Please check your connection!";
+                                    } else if (volleyError instanceof ServerError) {
+                                        message = "The server could not be found. Please try again after some time!!";
+                                    } else if (volleyError instanceof AuthFailureError) {
+                                        message = "Cannot connect to Internet...Please check your connection!";
+                                    } else if (volleyError instanceof ParseError) {
+                                        message = "Parsing error! Please try again after some time!!";
+                                    } else if (volleyError instanceof NoConnectionError) {
+                                        message = "Cannot connect to Internet...Please check your connection!";
+                                    } else if (volleyError instanceof TimeoutError) {
+                                        message = "Connection TimeOut! Please check your internet connection.";
+                                    }
+
                                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                                     finish();
+
+                                    Toast.makeText(getApplicationContext() ,message, Toast.LENGTH_LONG).show();
                                 }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.d("responseError", error.toString());
-                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                                finish();
-                            }
-                        })
-                {
-                    @Override
-                    protected Map<String, String> getParams() {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("accountToken", accountToken);
-                        return params;
+                            })
+                    {
+                        @Override
+                        protected Map<String, String> getParams() {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("accountToken", accountToken);
+                            return params;
+                        }
+                    };
+
+                    stringRequest.setRetryPolicy(retryPolicy);
+
+                    RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+                    requestQueue.add(stringRequest);
                     }
-                };
+                    else {
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
 
-                stringRequest.setRetryPolicy(retryPolicy);
-
-                RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
-                requestQueue.add(stringRequest);
+                        Toast.makeText(getApplicationContext() ,"No internet connection", Toast.LENGTH_SHORT).show();
+                    }
             }
         }, 1000);
     }
@@ -173,5 +208,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return qrCodeBitmap;
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

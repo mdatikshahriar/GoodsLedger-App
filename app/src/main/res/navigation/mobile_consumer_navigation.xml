@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/navigation_consumer_queries"
-        android:name="com.example.goods_ledger.ConsumerPart.ui.ConsumerQueriesFragment"
+        android:name="com.example.goods_ledger.ConsumerPart.ui.QueriedProducts.ConsumerQueriesFragment"
         android:label="Queries"
         tools:layout="@layout/fragment_consumer_queries" >
     </fragment>

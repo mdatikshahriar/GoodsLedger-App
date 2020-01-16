@@ -73,12 +73,12 @@ public class SavedValues {
         editor.apply();
     }
 
-    public String getAccountIsManufacturerAssigned() {
-        return sharedpreferences.getString("ACCOUNT_IS_MANUFACTURER_ASSIGNED", "N/A");
+    public String getAccountOwnerManufacturerID() {
+        return sharedpreferences.getString("ACCOUNT_OWNER_MANUFACTURER_ID", "N/A");
     }
 
-    public void setAccountIsManufacturerAssigned(String accountIsManufacturerAssigned) {
-        editor.putString("ACCOUNT_IS_MANUFACTURER_ASSIGNED", accountIsManufacturerAssigned);
+    public void setAccountOwnerManufacturerID(String accountOwnerManufacturerID) {
+        editor.putString("ACCOUNT_OWNER_MANUFACTURER_ID", accountOwnerManufacturerID);
         editor.apply();
     }
 
@@ -137,7 +137,7 @@ public class SavedValues {
     }
 
     public String getFactoriesCount() {
-        return sharedpreferences.getString("FACTORIES_COUNT", "N/A");
+        return sharedpreferences.getString("FACTORIES_COUNT", "0");
     }
 
     public void setFactoriesCount(String factoriesCount) {
@@ -146,7 +146,7 @@ public class SavedValues {
     }
 
     public String getProductsCount() {
-        return sharedpreferences.getString("PRODUCTS_COUNT", "N/A");
+        return sharedpreferences.getString("PRODUCTS_COUNT", "0");
     }
 
     public void setProductsCount(String productsCount) {
@@ -155,11 +155,20 @@ public class SavedValues {
     }
 
     public String getOwnedProductsCount() {
-        return sharedpreferences.getString("OWNED_PRODUCTS_COUNT", "N/A");
+        return sharedpreferences.getString("OWNED_PRODUCTS_COUNT", "0");
     }
 
     public void setOwnedProductsCount(String ownedProductsCount) {
         editor.putString("OWNED_PRODUCTS_COUNT", ownedProductsCount);
+        editor.apply();
+    }
+
+    public String getQueriedProductsCount() {
+        return sharedpreferences.getString("QUERIED_PRODUCTS_COUNT", "0");
+    }
+
+    public void setQueriedProductsCount(String queriedProductsCount) {
+        editor.putString("QUERIED_PRODUCTS_COUNT", queriedProductsCount);
         editor.apply();
     }
 }

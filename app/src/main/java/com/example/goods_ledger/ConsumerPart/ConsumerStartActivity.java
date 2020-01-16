@@ -3,14 +3,22 @@ package com.example.goods_ledger.ConsumerPart;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -37,7 +45,7 @@ import java.util.Map;
 public class ConsumerStartActivity extends AppCompatActivity {
 
     private static Bitmap accountUserameBitmap;
-    private static ArrayList<Product> ownedProductsArray;
+    private static ArrayList<Product> ownedProductsArray, queriedProductsArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +63,7 @@ public class ConsumerStartActivity extends AppCompatActivity {
         accountUserameBitmap = MainActivity.getQRcodeBitmap(MainActivity.getSavedValues().getAccountUsername());
 
         ownedProductsArray = new ArrayList<>();
+        queriedProductsArray = new ArrayList<>();
 
         final String productOwnerAccountID = MainActivity.getSavedValues().getAccountKey();
 
@@ -99,8 +108,25 @@ public class ConsumerStartActivity extends AppCompatActivity {
                 },
                 new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("responseError", error.toString());
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.d("responseError", volleyError.toString());
+
+                        String message = null;
+                        if (volleyError instanceof NetworkError) {
+                            message = "Cannot connect to Internet...Please check your connection!";
+                        } else if (volleyError instanceof ServerError) {
+                            message = "The server could not be found. Please try again after some time!!";
+                        } else if (volleyError instanceof AuthFailureError) {
+                            message = "Cannot connect to Internet...Please check your connection!";
+                        } else if (volleyError instanceof ParseError) {
+                            message = "Parsing error! Please try again after some time!!";
+                        } else if (volleyError instanceof NoConnectionError) {
+                            message = "Cannot connect to Internet...Please check your connection!";
+                        } else if (volleyError instanceof TimeoutError) {
+                            message = "Connection TimeOut! Please check your internet connection.";
+                        }
+
+                        Toast.makeText(getApplicationContext() ,message, Toast.LENGTH_LONG).show();
                     }
                 })
         {
@@ -118,11 +144,15 @@ public class ConsumerStartActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    public static Bitmap getAccountUsernameBitmap() {
+    public static Bitmap getAccountUserameBitmap() {
         return accountUserameBitmap;
     }
 
     public static ArrayList<Product> getOwnedProductsArray() {
         return ownedProductsArray;
+    }
+
+    public static ArrayList<Product> getQueriedProductsArray() {
+        return queriedProductsArray;
     }
 }

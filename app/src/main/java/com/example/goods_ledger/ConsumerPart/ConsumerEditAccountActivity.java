@@ -11,9 +11,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -46,7 +52,7 @@ public class ConsumerEditAccountActivity extends AppCompatActivity {
         updateButton = findViewById(R.id.activity_consumer_edit_account_update_Button);
         progressBar = findViewById(R.id.activity_consumer_edit_account_Progressbar);
 
-        profilePictureImageView.setImageBitmap(ConsumerStartActivity.getAccountUsernameBitmap());
+        profilePictureImageView.setImageBitmap(ConsumerStartActivity.getAccountUserameBitmap());
 
         accountNameEditText.setText(MainActivity.getSavedValues().getAccountName());
         accountEmailEditText.setText(MainActivity.getSavedValues().getAccountEmail());
@@ -60,7 +66,6 @@ public class ConsumerEditAccountActivity extends AppCompatActivity {
                 final String accountName = accountNameEditText.getText().toString();
                 final String accountEmail = accountEmailEditText.getText().toString();
                 final String accountPhoneNumber = accountPhoneNoEditText.getText().toString();
-                final String accountIsManufacturerAssigned = MainActivity.getSavedValues().getAccountIsManufacturerAssigned();
 
                 progressBar.setVisibility(View.VISIBLE);
 
@@ -91,10 +96,27 @@ public class ConsumerEditAccountActivity extends AppCompatActivity {
                         },
                         new Response.ErrorListener() {
                             @Override
-                            public void onErrorResponse(VolleyError error) {
+                            public void onErrorResponse(VolleyError volleyError) {
+                                Log.d("responseError", volleyError.toString());
+
                                 progressBar.setVisibility(View.GONE);
-                                Toast.makeText(ConsumerEditAccountActivity.this, "Account updating failed! Error: " + error.toString(), Toast.LENGTH_SHORT).show();
-                                Log.d("responseError", error.toString());
+
+                                String message = null;
+                                if (volleyError instanceof NetworkError) {
+                                    message = "Cannot connect to Internet...Please check your connection!";
+                                } else if (volleyError instanceof ServerError) {
+                                    message = "The server could not be found. Please try again after some time!!";
+                                } else if (volleyError instanceof AuthFailureError) {
+                                    message = "Cannot connect to Internet...Please check your connection!";
+                                } else if (volleyError instanceof ParseError) {
+                                    message = "Parsing error! Please try again after some time!!";
+                                } else if (volleyError instanceof NoConnectionError) {
+                                    message = "Cannot connect to Internet...Please check your connection!";
+                                } else if (volleyError instanceof TimeoutError) {
+                                    message = "Connection TimeOut! Please check your internet connection.";
+                                }
+
+                                Toast.makeText(getApplicationContext() ,message, Toast.LENGTH_LONG).show();
                             }
                         })
                 {
@@ -106,7 +128,6 @@ public class ConsumerEditAccountActivity extends AppCompatActivity {
                         params.put("accountName", accountName);
                         params.put("accountEmail", accountEmail);
                         params.put("accountPhoneNumber", accountPhoneNumber);
-                        params.put("accountIsManufacturerAssigned", accountIsManufacturerAssigned);
                         return params;
                     }
                 };

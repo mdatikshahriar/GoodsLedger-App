@@ -13,9 +13,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -44,7 +50,7 @@ public class ConsumerOptionsFragment extends Fragment {
         progressBar = root.findViewById(R.id.fragment_consumer_options_progressbar);
 
         final String accountKey = MainActivity.getSavedValues().getAccountKey();
-        final String accountToken = "";
+        final String accountToken = "*#@%";
 
         accountInfoLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,18 +75,36 @@ public class ConsumerOptionsFragment extends Fragment {
                             @Override
                             public void onResponse(String response) {
                                 MainActivity.getSavedValues().setOwnedProductsCount("0");
-
+                                MainActivity.getSavedValues().setQueriedProductsCount("0");
                                 MainActivity.getSavedValues().setAccountToken(accountToken);
+
                                 startActivity(new Intent(getActivity(), LoginActivity.class));
                                 getActivity().finish();
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
-                            public void onErrorResponse(VolleyError error) {
+                            public void onErrorResponse(VolleyError volleyError) {
+                                Log.d("responseError", volleyError.toString());
+
                                 progressBar.setVisibility(View.GONE);
-                                Toast.makeText(getActivity(), "Logout failed! Error: " + error.toString(), Toast.LENGTH_SHORT).show();
-                                Log.d("responseError", error.toString());
+
+                                String message = null;
+                                if (volleyError instanceof NetworkError) {
+                                    message = "Cannot connect to Internet...Please check your connection!";
+                                } else if (volleyError instanceof ServerError) {
+                                    message = "The server could not be found. Please try again after some time!!";
+                                } else if (volleyError instanceof AuthFailureError) {
+                                    message = "Cannot connect to Internet...Please check your connection!";
+                                } else if (volleyError instanceof ParseError) {
+                                    message = "Parsing error! Please try again after some time!!";
+                                } else if (volleyError instanceof NoConnectionError) {
+                                    message = "Cannot connect to Internet...Please check your connection!";
+                                } else if (volleyError instanceof TimeoutError) {
+                                    message = "Connection TimeOut! Please check your internet connection.";
+                                }
+
+                                Toast.makeText(getActivity() ,message, Toast.LENGTH_LONG).show();
                             }
                         })
                 {

@@ -13,20 +13,20 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/popup_qrcode_scanner_firstTitle_TextView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:fontFamily="casual"
-            android:text="Add Product"
             android:textColor="#000000"
             android:textSize="30sp"
             android:gravity="center"/>
 
         <TextView
+            android:id="@+id/popup_qrcode_scanner_info_TextView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4"
-            android:text="In order to add a product first click the camera button below and then scan the QR code of the product with your phone's camera. Be sure to give camera permission before."
             android:textColor="#000000"
             android:textSize="20sp"
             android:padding="10dp"
@@ -70,11 +70,11 @@
         android:visibility="invisible">
 
         <TextView
+            android:id="@+id/popup_qrcode_scanner_secondTitle_TextView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:fontFamily="casual"
-            android:text="Add Product"
             android:textColor="#000000"
             android:textSize="30sp"
             android:gravity="center"/>
@@ -98,11 +98,10 @@
             android:gravity="center"/>
 
         <Button
-            android:id="@+id/popup_qrcode_scanner_ownProduct_Button"
+            android:id="@+id/popup_qrcode_scanner_result_Button"
             android:layout_width="200dp"
             android:layout_height="0dp"
-            android:layout_weight="0.7"
-            android:text="Own Product"
+            android:layout_weight="0.8"
             android:textColor="#ffffff"
             android:textSize="20sp"
             android:background="@drawable/rounded_rectangle"
