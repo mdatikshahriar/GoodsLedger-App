@@ -25,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.goods_ledger.ConsumerPart.ConsumerStartActivity;
+import com.example.goods_ledger.GuestPart.GuestActivity;
 import com.example.goods_ledger.ManufacturerPart.AddManufacturerActivity;
 import com.example.goods_ledger.ManufacturerPart.ManufacturerStartActivity;
 
@@ -38,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText username, password;
     private Button loginButton;
-    private TextView forgotPasswordTextView, signUpTextView;
+    private TextView forgotPasswordTextView, signUpTextView, guestLoginTextView;
     private ProgressBar progressBar;
 
     @Override
@@ -51,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_activity_login_button);
         forgotPasswordTextView = findViewById(R.id.login_activity_forgotPassword_textView);
         signUpTextView = findViewById(R.id.login_activity_signup_textView);
+        guestLoginTextView = findViewById(R.id.login_activity_guestLogin_TextView);
         progressBar = findViewById(R.id.activity_login_progressbar);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +179,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+            }
+        });
+
+        guestLoginTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, GuestActivity.class));
             }
         });
     }

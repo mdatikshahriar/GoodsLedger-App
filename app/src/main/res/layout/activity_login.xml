@@ -87,15 +87,14 @@
             android:gravity="center"/>
 
         <LinearLayout
-            android:id="@+id/login_activity_bottom_linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="2"
             android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:gravity="center">
 
             <TextView
-                android:id="@+id/login_activity_bottom_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Don't have an account?"
@@ -108,6 +107,31 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="Sign up here"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="22sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Or"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/login_activity_guestLogin_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Log in as a guest"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="22sp" />
 
