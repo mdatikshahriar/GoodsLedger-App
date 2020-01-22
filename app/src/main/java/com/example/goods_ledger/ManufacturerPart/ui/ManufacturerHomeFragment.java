@@ -44,6 +44,7 @@ import com.example.goods_ledger.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,7 +125,7 @@ public class ManufacturerHomeFragment extends Fragment {
         addFactoriesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final EditText factoryIDEditText, factoryLocationEditText;
+                final EditText factoryIDEditText, factoryNameEditText, factoryLocationEditText;
                 Button addButton;
                 final ProgressBar progressBar;
 
@@ -132,6 +133,7 @@ public class ManufacturerHomeFragment extends Fragment {
                 addFactoriesPopup.setCanceledOnTouchOutside(true);
 
                 factoryIDEditText = addFactoriesPopup.findViewById(R.id.popup_add_factories_factoryID_EditText);
+                factoryNameEditText = addFactoriesPopup.findViewById(R.id.popup_add_factories_factoryName_EditText);
                 factoryLocationEditText = addFactoriesPopup.findViewById(R.id.popup_add_factories_factoryLocation_EditText);
                 addButton = addFactoriesPopup.findViewById(R.id.popup_add_factories_addFactory_Button);
                 progressBar = addFactoriesPopup.findViewById(R.id.popup_add_factories_Progressbar);
@@ -142,6 +144,7 @@ public class ManufacturerHomeFragment extends Fragment {
 
                         final String factoryManufacturerID = MainActivity.getSavedValues().getManufacturerKey();
                         final String factoryID = factoryIDEditText.getText().toString();
+                        String factoryName = factoryNameEditText.getText().toString();
                         final String factoryLocation = factoryLocationEditText.getText().toString();
 
                         if(factoryID.isEmpty()){
@@ -152,6 +155,11 @@ public class ManufacturerHomeFragment extends Fragment {
                             factoryLocationEditText.setError("Please type Something!");
                             return;
                         }
+                        else if(factoryName.isEmpty()){
+                            factoryName = MainActivity.getSavedValues().getManufacturerName();
+                        }
+
+                        final String finalFactoryName = factoryName;
 
                         progressBar.setVisibility(View.VISIBLE);
 
@@ -165,9 +173,10 @@ public class ManufacturerHomeFragment extends Fragment {
                                             String factoryKeyResponse = object.getString("factoryKey").trim();
                                             String factoryManufacturerIDResponse = object.getString("factoryManufacturerID").trim();
                                             String factoryIDResponse = object.getString("factoryID").trim();
+                                            String factoryNameResponse = object.getString("factoryName").trim();
                                             String factoryLocationResponse = object.getString("factoryLocation").trim();
 
-                                            Factory newFactory = new Factory(factoryKeyResponse, factoryManufacturerIDResponse, factoryIDResponse, factoryLocationResponse);
+                                            Factory newFactory = new Factory(factoryKeyResponse, factoryManufacturerIDResponse, factoryIDResponse, factoryNameResponse, factoryLocationResponse);
 
                                             ManufacturerStartActivity.getFactoriesArray().add(newFactory);
                                             MainActivity.getSavedValues().setFactoriesCount(Integer.toString(1 + Integer.parseInt(MainActivity.getSavedValues().getFactoriesCount())));
@@ -215,6 +224,7 @@ public class ManufacturerHomeFragment extends Fragment {
                                 Map<String, String> params = new HashMap<>();
                                 params.put("factoryManufacturerID", factoryManufacturerID);
                                 params.put("factoryID", factoryID);
+                                params.put("factoryName", finalFactoryName);
                                 params.put("factoryLocation", factoryLocation);
                                 return params;
                             }
@@ -237,7 +247,7 @@ public class ManufacturerHomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final EditText productFactoryIDEditText, productIDEditText, productNameEditText, productTypeEditText,
-                        productBatchEditText, productManufacturingDateEditText,productExpiryDateEditText;
+                        productBatchEditText, productSerialinBatchEditText, productManufacturingDateEditText,productExpiryDateEditText;
                 Button addButton;
                 final ProgressBar progressBar;
 
@@ -249,6 +259,7 @@ public class ManufacturerHomeFragment extends Fragment {
                 productNameEditText = addProductsPopup.findViewById(R.id.popup_add_products_productName_EditText);
                 productTypeEditText = addProductsPopup.findViewById(R.id.popup_add_products_productType_EditText);
                 productBatchEditText = addProductsPopup.findViewById(R.id.popup_add_products_productBatch_EditText);
+                productSerialinBatchEditText = addProductsPopup.findViewById(R.id.popup_add_products_productSerialinBatch_EditText);
                 productManufacturingDateEditText = addProductsPopup.findViewById(R.id.popup_add_products_productManufacturingDate_EditText);
                 productExpiryDateEditText = addProductsPopup.findViewById(R.id.popup_add_products_productExpiryDate_EditText);
                 addButton = addProductsPopup.findViewById(R.id.popup_add_products_addProduct_Button);
@@ -265,6 +276,8 @@ public class ManufacturerHomeFragment extends Fragment {
                         final String  productName = productNameEditText.getText().toString();
                         final String  productType = productTypeEditText.getText().toString();
                         final String  productBatch = productBatchEditText.getText().toString();
+                        final String  productSerialinBatch = productSerialinBatchEditText.getText().toString();
+                        String  productManufacturingLocation = "";
                         final String  productManufacturingDate = productManufacturingDateEditText.getText().toString();
                         final String  productExpiryDate = productExpiryDateEditText.getText().toString();
 
@@ -288,6 +301,10 @@ public class ManufacturerHomeFragment extends Fragment {
                             productBatchEditText.setError("Please type Something!");
                             return;
                         }
+                        else if(productSerialinBatch.isEmpty()){
+                            productSerialinBatchEditText.setError("Please type Something!");
+                            return;
+                        }
                         else if(productManufacturingDate.isEmpty()){
                             productManufacturingDateEditText.setError("Please type Something!");
                             return;
@@ -296,6 +313,27 @@ public class ManufacturerHomeFragment extends Fragment {
                             productExpiryDateEditText.setError("Please type Something!");
                             return;
                         }
+
+                        ArrayList<Factory> factoriesArray = ManufacturerStartActivity.getFactoriesArray();
+
+                        int flag = 0;
+
+                        for (int i = 0; i<factoriesArray.size(); i++) {
+                            Factory factory = factoriesArray.get(i);
+
+                            if (factory.getFactoryID().equals(productFactoryID)) {
+                                productManufacturingLocation = factory.getFactoryLocation();
+                                flag = 1;
+                                break;
+                            }
+                        }
+
+                        if(flag == 0){
+                            Toast.makeText(getActivity(), "Factory doesn't exist", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        final String finalProductManufacturingLocation = productManufacturingLocation;
 
                         progressBar.setVisibility(View.VISIBLE);
 
@@ -315,11 +353,13 @@ public class ManufacturerHomeFragment extends Fragment {
                                             String productNameResponse = object.getString("productName").trim();
                                             String productTypeResponse = object.getString("productType").trim();
                                             String productBatchResponse = object.getString("productBatch").trim();
+                                            String productSerialinBatchResponse = object.getString("productSerialinBatch").trim();
+                                            String productManufacturingLocationResponse = object.getString("productManufacturingLocation").trim();
                                             String productManufacturingDateResponse = object.getString("productManufacturingDate").trim();
                                             String productExpiryDateResponse = object.getString("productExpiryDate").trim();
 
                                             Product newProduct = new Product(productKeyResponse, productOwnerAccountIDResponse, productManufacturerIDResponse, productManufacturerNameResponse,productFactoryIDResponse, productIDResponse,
-                                                    productNameResponse, productTypeResponse, productBatchResponse, productManufacturingDateResponse, productExpiryDateResponse);
+                                                    productNameResponse, productTypeResponse, productBatchResponse, productSerialinBatchResponse, productManufacturingLocationResponse, productManufacturingDateResponse, productExpiryDateResponse);
 
                                             ManufacturerStartActivity.getProductsArray().add(newProduct);
                                             MainActivity.getSavedValues().setProductsCount(Integer.toString(1 + Integer.parseInt(MainActivity.getSavedValues().getProductsCount())));
@@ -373,6 +413,8 @@ public class ManufacturerHomeFragment extends Fragment {
                                 params.put("productName", productName);
                                 params.put("productType", productType);
                                 params.put("productBatch", productBatch);
+                                params.put("productSerialinBatch", productSerialinBatch);
+                                params.put("productManufacturingLocation", finalProductManufacturingLocation);
                                 params.put("productManufacturingDate", productManufacturingDate);
                                 params.put("productExpiryDate", productExpiryDate);
                                 return params;

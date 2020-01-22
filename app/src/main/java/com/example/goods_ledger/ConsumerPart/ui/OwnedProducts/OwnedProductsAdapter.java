@@ -51,7 +51,8 @@ public class OwnedProductsAdapter extends RecyclerView.Adapter <RecyclerView.Vie
         productType.setText(product.getProductType());
         productID.setText(product.getProductID());
         ownedProductsHolder.productBatchID = product.getProductBatch();
-        ownedProductsHolder.productFactoryID = product.getProductFactoryID();
+        ownedProductsHolder.productSerialinBatch = product.getProductSerialinBatch();
+        ownedProductsHolder.productManufacturingLocation = product.getProductManufacturingLocation();
         ownedProductsHolder.productManufacturingDate = product.getProductManufacturingDate();
         ownedProductsHolder.productExpiryDate = product.getProductExpiryDate();
     }
@@ -67,7 +68,7 @@ public class OwnedProductsAdapter extends RecyclerView.Adapter <RecyclerView.Vie
         private LinearLayout productLinearLayout;
         private TextView productName, productType, productID;
         private Dialog qrcodePopup, productInfoPopup;
-        private String productBatchID, productFactoryID, productManufacturingDate, productExpiryDate;
+        private String productBatchID, productSerialinBatch, productManufacturingLocation, productManufacturingDate, productExpiryDate;
 
         public OwnedProductsHolder(@NonNull final View itemView) {
             super(itemView);
@@ -102,8 +103,8 @@ public class OwnedProductsAdapter extends RecyclerView.Adapter <RecyclerView.Vie
                 @Override
                 public void onClick(View v) {
                     ImageView productQRCodeImage;
-                    TextView productIDTextView, productNameTextView, productTypeTextView, productBatchIDTextView,
-                            productFactoryIDTextView, productManufacturingDateTextView, productExpiryDateTextView;
+                    TextView productIDTextView, productNameTextView, productTypeTextView, productBatchIDTextView, productSerialinBatchTextView,
+                            productManufacturingLocationTextView, productManufacturingDateTextView, productExpiryDateTextView;
 
                     productInfoPopup.setContentView(R.layout.popup_product_info);
                     productInfoPopup.setCanceledOnTouchOutside(true);
@@ -113,7 +114,8 @@ public class OwnedProductsAdapter extends RecyclerView.Adapter <RecyclerView.Vie
                     productNameTextView = productInfoPopup.findViewById(R.id.popup_product_info_productName_TextView);
                     productTypeTextView = productInfoPopup.findViewById(R.id.popup_product_info_productType_TextView);
                     productBatchIDTextView = productInfoPopup.findViewById(R.id.popup_product_info_productBatchID_TextView);
-                    productFactoryIDTextView = productInfoPopup.findViewById(R.id.popup_product_info_productFactoryID_TextView);
+                    productSerialinBatchTextView = productInfoPopup.findViewById(R.id.popup_product_info_productSerialinBatch_TextView);
+                    productManufacturingLocationTextView = productInfoPopup.findViewById(R.id.popup_product_info_productManufacturingLocation_TextView);
                     productManufacturingDateTextView = productInfoPopup.findViewById(R.id.popup_product_info_productManufacturingDate_TextView);
                     productExpiryDateTextView = productInfoPopup.findViewById(R.id.popup_product_info_productExpiryDate_TextView);
 
@@ -122,7 +124,8 @@ public class OwnedProductsAdapter extends RecyclerView.Adapter <RecyclerView.Vie
                     productNameTextView.setText(productName.getText());
                     productTypeTextView.setText(productType.getText());
                     productBatchIDTextView.setText(productBatchID);
-                    productFactoryIDTextView.setText(productFactoryID);
+                    productSerialinBatchTextView.setText(productSerialinBatch);
+                    productManufacturingLocationTextView.setText(productManufacturingLocation);
                     productManufacturingDateTextView.setText(productManufacturingDate);
                     productExpiryDateTextView.setText(productExpiryDate);
 

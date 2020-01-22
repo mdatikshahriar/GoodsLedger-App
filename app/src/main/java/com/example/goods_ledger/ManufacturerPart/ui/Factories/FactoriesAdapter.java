@@ -45,13 +45,14 @@ public class FactoriesAdapter extends RecyclerView.Adapter <RecyclerView.ViewHol
 
         ImageView factoryQRCodeImageView = factoriesHolder.factoryQRCodeImageView;
         TextView factoryLocation = factoriesHolder.factoryLocation;
-        TextView factoryManufacturerName = factoriesHolder.factoryManufacturerName;
+        TextView factoryName = factoriesHolder.factoryName;
         TextView factoryID = factoriesHolder.factoryID;
 
         factoryQRCodeImageView.setImageBitmap(MainActivity.getQRcodeBitmap(factory.getFactoryKey()));
         factoryLocation.setText(factory.getFactoryLocation());
-        factoryManufacturerName.setText(MainActivity.getSavedValues().getManufacturerName());
+        factoryName.setText(factory.getFactoryName());
         factoryID.setText(factory.getFactoryID());
+        factoriesHolder.factoryManufacturerName = MainActivity.getSavedValues().getManufacturerName();
     }
 
     @Override
@@ -63,8 +64,9 @@ public class FactoriesAdapter extends RecyclerView.Adapter <RecyclerView.ViewHol
     private class FactoriesHolder extends RecyclerView.ViewHolder{
         private ImageView factoryQRCodeImageView;
         private LinearLayout factoryLinearLayout;
-        private TextView factoryLocation, factoryManufacturerName, factoryID;
+        private TextView factoryLocation, factoryName, factoryID;
         private Dialog qrcodePopup, factoryInfoPopup;
+        private String factoryManufacturerName;
 
         public FactoriesHolder(@NonNull final View itemView) {
             super(itemView);
@@ -75,7 +77,7 @@ public class FactoriesAdapter extends RecyclerView.Adapter <RecyclerView.ViewHol
             factoryQRCodeImageView = itemView.findViewById(R.id.item_manufacturer_factories_factoryQRCode_ImageView);
             factoryLinearLayout = itemView.findViewById(R.id.item_manufacturer_factories_LinearLayout);
             factoryLocation = itemView.findViewById(R.id.item_manufacturer_factories_factoryLocation_TextView);
-            factoryManufacturerName = itemView.findViewById(R.id.item_manufacturer_factories_factoryManufacturerName_TextView);
+            factoryName = itemView.findViewById(R.id.item_manufacturer_factories_factoryName_TextView);
             factoryID = itemView.findViewById(R.id.item_manufacturer_factories_factoryID_TextView);
 
             factoryQRCodeImageView.setOnClickListener(new View.OnClickListener() {
@@ -99,20 +101,22 @@ public class FactoriesAdapter extends RecyclerView.Adapter <RecyclerView.ViewHol
                 @Override
                 public void onClick(View v) {
                     ImageView factoryQRCodeImage;
-                    TextView factoryIDTextView, factoryLocationTextView, factoryManufacturerNameTextView;
+                    TextView factoryIDTextView, factoryNameTextView, factoryLocationTextView, factoryManufacturerNameTextView;
 
                     factoryInfoPopup.setContentView(R.layout.popup_factory_info);
                     factoryInfoPopup.setCanceledOnTouchOutside(true);
 
                     factoryQRCodeImage = factoryInfoPopup.findViewById(R.id.popup_factory_info_factoryQRCode_ImageView);
                     factoryIDTextView = factoryInfoPopup.findViewById(R.id.popup_factory_info_factoryID_TextView);
+                    factoryNameTextView = factoryInfoPopup.findViewById(R.id.popup_factory_info_factoryName_TextView);
                     factoryLocationTextView = factoryInfoPopup.findViewById(R.id.popup_factory_info_factoryLocation_TextView);
                     factoryManufacturerNameTextView = factoryInfoPopup.findViewById(R.id.popup_factory_info_factoryManufacturerName_TextView);
 
                     factoryQRCodeImage.setImageDrawable(factoryQRCodeImageView.getDrawable());
                     factoryIDTextView.setText(factoryID.getText());
+                    factoryNameTextView.setText(factoryName.getText());
                     factoryLocationTextView.setText(factoryLocation.getText());
-                    factoryManufacturerNameTextView.setText(factoryManufacturerName.getText());
+                    factoryManufacturerNameTextView.setText(factoryManufacturerName);
 
                     factoryInfoPopup.show();
                     factoryInfoPopup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

@@ -2,12 +2,13 @@ package com.example.goods_ledger.Assets;
 
 public class Factory {
 
-    private String factoryKey, factoryManufacturerID, factoryID, factoryLocation;
+    private String factoryKey, factoryManufacturerID, factoryID, factoryName, factoryLocation;
 
-    public Factory(String factoryKey, String factoryManufacturerID, String factoryID, String factoryLocation) {
+    public Factory(String factoryKey, String factoryManufacturerID, String factoryID, String factoryName, String factoryLocation) {
         this.factoryKey = factoryKey;
         this.factoryManufacturerID = factoryManufacturerID;
         this.factoryID = factoryID;
+        this.factoryName = factoryName;
         this.factoryLocation = factoryLocation;
     }
 
@@ -33,6 +34,14 @@ public class Factory {
 
     public void setFactoryID(String factoryID) {
         this.factoryID = factoryID;
+    }
+
+    public String getFactoryName() {
+        return factoryName;
+    }
+
+    public void setFactoryName(String factoryName) {
+        this.factoryName = factoryName;
     }
 
     public String getFactoryLocation() {

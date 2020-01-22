@@ -30,6 +30,8 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.goods_ledger.Assets.Product;
+import com.example.goods_ledger.ConsumerPart.ConsumerStartActivity;
 import com.example.goods_ledger.LoginActivity;
 import com.example.goods_ledger.MainActivity;
 import com.example.goods_ledger.R;
@@ -180,14 +182,16 @@ public class GuestActivity extends AppCompatActivity {
                                                         final String productKeyResponse = jsonObject.getString("Key").trim();
                                                         JSONObject object = jsonObject.getJSONObject("Record");
 
-                                                        final String productOwnerAccountIDResponse = object.getString("ProductOwnerAccountID").trim();
-                                                        final String productManufacturerIDResponse = object.getString("ProductManufacturerID").trim();
-                                                        final String productManufacturerNameResponse = object.getString("ProductManufacturerName").trim();
+                                                        String productOwnerAccountIDResponse = object.getString("ProductOwnerAccountID").trim();
+                                                        String productManufacturerIDResponse = object.getString("ProductManufacturerID").trim();
+                                                        String productManufacturerNameResponse = object.getString("ProductManufacturerName").trim();
                                                         final String productFactoryIDResponse = object.getString("ProductFactoryID").trim();
                                                         final String productIDResponse = object.getString("ProductID").trim();
                                                         final String productNameResponse = object.getString("ProductName").trim();
                                                         final String productTypeResponse = object.getString("ProductType").trim();
                                                         final String productBatchResponse = object.getString("ProductBatch").trim();
+                                                        final String productSerialinBatchResponse = object.getString("ProductSerialinBatch").trim();
+                                                        final String productManufacturingLocationResponse = object.getString("ProductManufacturingLocation").trim();
                                                         final String productManufacturingDateResponse = object.getString("ProductManufacturingDate").trim();
                                                         final String productExpiryDateResponse = object.getString("ProductExpiryDate").trim();
 
@@ -197,8 +201,8 @@ public class GuestActivity extends AppCompatActivity {
                                                                 checkProductsPopup.dismiss();
 
                                                                 ImageView productQRCodeImage;
-                                                                TextView productIDTextView, productNameTextView, productTypeTextView, productBatchIDTextView,
-                                                                        productFactoryIDTextView, productManufacturingDateTextView, productExpiryDateTextView;
+                                                                TextView productIDTextView, productNameTextView, productTypeTextView, productBatchIDTextView, productSerialinBatchTextView,
+                                                                        productManufacturingLocationTextView, productManufacturingDateTextView, productExpiryDateTextView;
 
                                                                 productInfoPopup.setContentView(R.layout.popup_product_info);
                                                                 productInfoPopup.setCanceledOnTouchOutside(true);
@@ -208,7 +212,8 @@ public class GuestActivity extends AppCompatActivity {
                                                                 productNameTextView = productInfoPopup.findViewById(R.id.popup_product_info_productName_TextView);
                                                                 productTypeTextView = productInfoPopup.findViewById(R.id.popup_product_info_productType_TextView);
                                                                 productBatchIDTextView = productInfoPopup.findViewById(R.id.popup_product_info_productBatchID_TextView);
-                                                                productFactoryIDTextView = productInfoPopup.findViewById(R.id.popup_product_info_productFactoryID_TextView);
+                                                                productSerialinBatchTextView = productInfoPopup.findViewById(R.id.popup_product_info_productSerialinBatch_TextView);
+                                                                productManufacturingLocationTextView = productInfoPopup.findViewById(R.id.popup_product_info_productManufacturingLocation_TextView);
                                                                 productManufacturingDateTextView = productInfoPopup.findViewById(R.id.popup_product_info_productManufacturingDate_TextView);
                                                                 productExpiryDateTextView = productInfoPopup.findViewById(R.id.popup_product_info_productExpiryDate_TextView);
 
@@ -217,7 +222,8 @@ public class GuestActivity extends AppCompatActivity {
                                                                 productNameTextView.setText(productNameResponse);
                                                                 productTypeTextView.setText(productTypeResponse);
                                                                 productBatchIDTextView.setText(productBatchResponse);
-                                                                productFactoryIDTextView.setText(productFactoryIDResponse);
+                                                                productSerialinBatchTextView.setText(productSerialinBatchResponse);
+                                                                productManufacturingLocationTextView.setText(productManufacturingLocationResponse);
                                                                 productManufacturingDateTextView.setText(productManufacturingDateResponse);
                                                                 productExpiryDateTextView.setText(productExpiryDateResponse);
 
@@ -227,7 +233,7 @@ public class GuestActivity extends AppCompatActivity {
                                                         });
 
                                                         if(productOwnerAccountIDResponse.equals("*#@%")){
-                                                            String resultText = "The product is a real product.\n It's manufactured by " + productManufacturerNameResponse + ".\n The product hasn't been owned by anyone yet.\n Want to see details of this product? Click the button below.";
+                                                            String resultText = "The product is a real product.\n It's manufactured by " + productManufacturerNameResponse + " in " + productManufacturingLocationResponse + ".\n The product hasn't been owned by anyone yet.\n Want to see details of this product? Click the button below.";
 
                                                             progressBar.setVisibility(View.GONE);
 
@@ -237,7 +243,7 @@ public class GuestActivity extends AppCompatActivity {
 
                                                             secondLinearLayout.setVisibility(View.VISIBLE);
                                                         } else{
-                                                            String resultText = "The product is manufactured by " + productManufacturerNameResponse + ".\n It's owned by someone else!\n If you claim to own it, then perhaps your product is a counterfeit product.";
+                                                            String resultText = "The product is manufactured by " + productManufacturerNameResponse + " in " + productManufacturingLocationResponse + ".\n It's owned by someone else!\n If you claim to own it, then perhaps your product is a counterfeit product.";
 
                                                             progressBar.setVisibility(View.GONE);
 

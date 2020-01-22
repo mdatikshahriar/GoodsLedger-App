@@ -3,9 +3,9 @@ package com.example.goods_ledger.Assets;
 public class Product {
 
     private String productKey, productOwnerAccountID, productManufacturerID, productManufacturerName, productFactoryID, productID,
-            productName, productType, productBatch, productManufacturingDate, productExpiryDate;
+            productName, productType, productBatch, productSerialinBatch, productManufacturingLocation, productManufacturingDate, productExpiryDate;
 
-    public Product(String productKey, String productOwnerAccountID, String productManufacturerID, String productManufacturerName, String productFactoryID, String productID, String productName, String productType, String productBatch, String productManufacturingDate, String productExpiryDate) {
+    public Product(String productKey, String productOwnerAccountID, String productManufacturerID, String productManufacturerName, String productFactoryID, String productID, String productName, String productType, String productBatch, String productSerialinBatch, String productManufacturingLocation, String productManufacturingDate, String productExpiryDate) {
         this.productKey = productKey;
         this.productOwnerAccountID = productOwnerAccountID;
         this.productManufacturerID = productManufacturerID;
@@ -15,6 +15,8 @@ public class Product {
         this.productName = productName;
         this.productType = productType;
         this.productBatch = productBatch;
+        this.productSerialinBatch = productSerialinBatch;
+        this.productManufacturingLocation = productManufacturingLocation;
         this.productManufacturingDate = productManufacturingDate;
         this.productExpiryDate = productExpiryDate;
     }
@@ -89,6 +91,22 @@ public class Product {
 
     public void setProductBatch(String productBatch) {
         this.productBatch = productBatch;
+    }
+
+    public String getProductSerialinBatch() {
+        return productSerialinBatch;
+    }
+
+    public void setProductSerialinBatch(String productSerialinBatch) {
+        this.productSerialinBatch = productSerialinBatch;
+    }
+
+    public String getProductManufacturingLocation() {
+        return productManufacturingLocation;
+    }
+
+    public void setProductManufacturingLocation(String productManufacturingLocation) {
+        this.productManufacturingLocation = productManufacturingLocation;
     }
 
     public String getProductManufacturingDate() {

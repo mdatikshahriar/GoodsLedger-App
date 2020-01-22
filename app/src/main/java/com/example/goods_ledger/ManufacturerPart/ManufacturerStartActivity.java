@@ -164,11 +164,13 @@ public class ManufacturerStartActivity extends AppCompatActivity {
                                 String productNameResponse = object.getString("ProductName").trim();
                                 String productTypeResponse = object.getString("ProductType").trim();
                                 String productBatchResponse = object.getString("ProductBatch").trim();
+                                String productSerialinBatchResponse = object.getString("ProductSerialinBatch").trim();
+                                String productManufacturingLocationResponse = object.getString("ProductManufacturingLocation").trim();
                                 String productManufacturingDateResponse = object.getString("ProductManufacturingDate").trim();
                                 String productExpiryDateResponse = object.getString("ProductExpiryDate").trim();
 
                                 Product newProduct = new Product(productKeyResponse, productOwnerAccountIDResponse, productManufacturerIDResponse, productManufacturerNameResponse, productFactoryIDResponse, productIDResponse,
-                                        productNameResponse, productTypeResponse, productBatchResponse, productManufacturingDateResponse, productExpiryDateResponse);
+                                        productNameResponse, productTypeResponse, productBatchResponse, productSerialinBatchResponse, productManufacturingLocationResponse, productManufacturingDateResponse, productExpiryDateResponse);
 
                                 productsArray.add(newProduct);
                             }
@@ -235,9 +237,10 @@ public class ManufacturerStartActivity extends AppCompatActivity {
 
                                 String factoryManufacturerIDResponse = object.getString("FactoryManufacturerID").trim();
                                 String factoryIDResponse = object.getString("FactoryID").trim();
+                                String factoryNameResponse = object.getString("FactoryName").trim();
                                 String factoryLocationResponse = object.getString("FactoryLocation").trim();
 
-                                Factory newFactory = new Factory(factoryKeyResponse, factoryManufacturerIDResponse, factoryIDResponse, factoryLocationResponse);
+                                Factory newFactory = new Factory(factoryKeyResponse, factoryManufacturerIDResponse, factoryIDResponse, factoryNameResponse, factoryLocationResponse);
 
                                 factoriesArray.add(newFactory);
                             }

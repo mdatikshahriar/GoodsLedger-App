@@ -35,14 +35,14 @@
             android:background="@drawable/one_sided_border">
 
             <TextView
-                android:id="@+id/item_manufacturer_factories_factoryLocation_TextView"
+                android:id="@+id/item_manufacturer_factories_factoryName_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#000000"
                 android:textSize="22sp" />
 
             <TextView
-                android:id="@+id/item_manufacturer_factories_factoryManufacturerName_TextView"
+                android:id="@+id/item_manufacturer_factories_factoryLocation_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
