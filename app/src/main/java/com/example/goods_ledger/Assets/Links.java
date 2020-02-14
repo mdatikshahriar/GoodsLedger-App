@@ -1,7 +1,7 @@
 package com.example.goods_ledger.Assets;
 
 public class Links {
-    private final String URL_main = "http://192.168.0.107:3000";
+    private final String URL_main = "http://192.168.0.108:3000";
     private final String URL_loginAccount = URL_main + "/loginAccount";
     private final String URL_registerAccount = URL_main + "/registerAccount";
     private final String URL_addManufacturer = URL_main + "/addManufacturer";

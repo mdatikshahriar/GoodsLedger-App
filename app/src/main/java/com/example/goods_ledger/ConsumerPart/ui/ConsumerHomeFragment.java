@@ -244,7 +244,7 @@ public class ConsumerHomeFragment extends Fragment{
 
                                                             secondLinearLayout.setVisibility(View.VISIBLE);
                                                         } else if(productOwnerAccountIDResponse.equals("*#@%")){
-                                                            String resultText = "The product is manufactured by " + productManufacturerNameResponse + ".\n The product hasn't been owned by anyone yet.\n Want to own this product? Click the button below.";
+                                                            String resultText = "The product is manufactured by " + productManufacturerNameResponse + " in " + productManufacturingLocationResponse + ".\n The product hasn't been owned by anyone yet.\n Want to own this product? Click the button below.";
 
                                                             progressBar.setVisibility(View.GONE);
 
@@ -313,7 +313,7 @@ public class ConsumerHomeFragment extends Fragment{
 
                                                             secondLinearLayout.setVisibility(View.VISIBLE);
                                                         } else{
-                                                            String resultText = "The product is manufactured by " + productManufacturerNameResponse + ".\n It's owned by someone else!\n If you claim to own it, then first request the original owner of the product to change it's ownership.\n Otherwise, perhaps your product is a counterfeit product.";
+                                                            String resultText = "The product is manufactured by " + productManufacturerNameResponse + " in " + productManufacturingLocationResponse + ".\n It's owned by someone else!\n If you claim to own it, then first request the original owner of the product to change it's ownership.\n Otherwise, perhaps your product is a counterfeit product.";
 
                                                             progressBar.setVisibility(View.GONE);
 
