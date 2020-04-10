@@ -8,7 +8,7 @@ public class SavedValues {
 
     public SavedValues(SharedPreferences sharedpreferences) {
         this.sharedpreferences = sharedpreferences;
-        this.editor =   sharedpreferences.edit();
+        this.editor = sharedpreferences.edit();
     }
 
     public String getAccountKey() {
