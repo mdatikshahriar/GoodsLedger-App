@@ -73,8 +73,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
-                    if(isOnline()){
+                if(isOnline()){
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, links.getURL_queryAccountbyToken(),
                             new Response.Listener<String>() {
                                 @Override
